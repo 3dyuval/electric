@@ -5,7 +5,7 @@ import {
   Row,
   GetExtensions,
 } from '@electric-sql/client'
-import { Ref, onUnmounted, toRef, watch, ref } from 'vue'
+import { Ref, onUnmounted, ref } from 'vue'
 
 type UnknownShape = Shape<Row<unknown>>
 type UnknownShapeStream = ShapeStream<Row<unknown>>
@@ -139,7 +139,7 @@ export interface UseShapeResult<T extends Row<unknown> = Row> {
    * Ref containing the error state of the Shape
    * @type {Ref<Shape<T>['error']>}
    */
-  error: Ref<Shape<T>['error']>
+  error: Ref<Shape<T>[`error`]>
   /**
    * Ref indicating if there is an error
    * @type {Ref<boolean>}
@@ -150,14 +150,17 @@ export interface UseShapeResult<T extends Row<unknown> = Row> {
 /**
  * Vue composable for using ElectricSQL shapes
  */
-export function index<T extends Row<unknown> = Row>(
+export function useShape<T extends Row<unknown> = Row>(
   options: UseShapeOptions<T>
 ): UseShapeResult<T> {
   // Extract fetchClient from options if provided
   const { fetchClient, ...streamOptions } = options
 
-  // If fetchClient is provided, override fetch for this request
+  // Store original fetch to restore later
   let originalFetch: typeof fetch | undefined
+
+  // Wrap the fetch logic to handle custom fetch client
+  // We need to do this because Vue setup functions can be called multiple times
   if (fetchClient) {
     originalFetch = globalThis.fetch
     globalThis.fetch = async (input: RequestInfo | URL, init?: RequestInit) => {
@@ -165,57 +168,57 @@ export function index<T extends Row<unknown> = Row>(
     }
   }
 
-  // Create shape and stream instances
-  const shapeStream = getShapeStream<T>(streamOptions)
-  const shape = getShape<T>(shapeStream)
+  try {
+    // Create shape and stream instances
+    const shapeStream = getShapeStream<T>(streamOptions)
+    const shape = getShape<T>(shapeStream)
 
-  // Restore original fetch after shape is created
-  if (originalFetch) {
-    globalThis.fetch = originalFetch
-  }
+    // Create reactive references
+    const data = ref(shape.currentRows) as Ref<T[]>
+    const isLoading = ref(true) // Start with loading true
+    const lastSyncedAt = ref<number | undefined>(undefined)
+    const isError = ref(shape.error !== false)
+    const error = ref(shape.error)
 
-  // Create reactive references
-  const data = ref(shape.currentRows) as Ref<T[]>
-  const isLoading = ref(shape.isLoading())
-  const lastSyncedAt = ref(shape.lastSyncedAt())
-  const isError = ref(shape.error !== false)
-  const error = ref(shape.error)
-
-  // Only subscribe if subscribe option is true or undefined (default is true)
-  if (options.subscribe !== false) {
-    // Subscribe to shape changes
-    const unsubscribe = shape.subscribe(({ rows }) => {
-      data.value = rows
-      isLoading.value = shape.isLoading()
+    // Initial load
+    shape.rows.then(() => {
+      data.value = shape.currentRows
+      isLoading.value = false
       lastSyncedAt.value = shape.lastSyncedAt()
       isError.value = shape.error !== false
       error.value = shape.error
     })
 
-    // Clean up subscription when component unmounts
-    onUnmounted(() => {
-      unsubscribe()
-    })
-  }
+    // Only subscribe if subscribe option is true or undefined (default is true)
+    if (options.subscribe !== false) {
+      // Subscribe to shape changes
+      const unsubscribe = shape.subscribe(() => {
+        data.value = shape.currentRows
+        isLoading.value = false
+        lastSyncedAt.value = shape.lastSyncedAt()
+        isError.value = shape.error !== false
+        error.value = shape.error
+      })
 
-  return {
-    data,
-    isLoading,
-    lastSyncedAt,
-    isError,
-    error,
-    shape,
-    stream: shapeStream,
+      // Clean up subscription when component unmounts
+      onUnmounted(() => {
+        unsubscribe()
+      })
+    }
+
+    return {
+      data,
+      isLoading,
+      lastSyncedAt,
+      isError,
+      error,
+      shape,
+      stream: shapeStream,
+    }
+  } finally {
+    // Restore original fetch in any case (success or error)
+    if (originalFetch) {
+      globalThis.fetch = originalFetch
+    }
   }
 }
-
-/**
- * Vue composable for using ElectricSQL shapes
- * This follows the same naming convention as the React hook
- */
-export function useShape<T extends Row<unknown> = Row>(
-  options: UseShapeOptions<T>
-): UseShapeResult<T> {
-  return index<T>(options)
-}
-
