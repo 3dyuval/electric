@@ -1,0 +1,843 @@
+[2025-04-21T04:20:43.539Z] Starting FileScopeMCP server initialization
+[2025-04-21T04:20:43.546Z] Initial working directory: /home/yuval/WebstormProjects/electric/packages/vue-composables
+[2025-04-21T04:20:43.546Z] Command line args: /home/yuval/.nvm/versions/node/v20.18.2/bin/node,/home/yuval/mcp-servers/file-scope/dist/mcp-server.js,--base-dir=./
+[2025-04-21T04:20:43.548Z] ========== CONFIG DEBUGGING ==========
+[2025-04-21T04:20:43.549Z] Loaded config: {
+  "baseDirectory": "",
+  "excludePatterns": [],
+  "fileWatching": {
+    "enabled": false,
+    "debounceMs": 300,
+    "ignoreDotFiles": true,
+    "autoRebuildTree": true,
+    "maxWatchedDirectories": 1000,
+    "watchForNewFiles": true,
+    "watchForDeleted": true,
+    "watchForChanged": true
+  },
+  "version": "1.0.0"
+}
+[2025-04-21T04:20:43.549Z] Exclude patterns count: 0
+[2025-04-21T04:20:43.549Z] =====================================
+[2025-04-21T04:20:43.549Z] Using base directory from command line: /home/yuval/WebstormProjects/electric/packages/vue-composables
+[2025-04-21T04:20:43.554Z] Global state after initialization:
+[2025-04-21T04:20:43.554Z] - Project root: /home/yuval/WebstormProjects/electric/packages/vue-composables
+[2025-04-21T04:20:43.555Z] - Config loaded: true
+[2025-04-21T04:20:43.555Z] - Exclude patterns count: 0
+[2025-04-21T04:20:43.555Z] Changed working directory to: /home/yuval/WebstormProjects/electric/packages/vue-composables
+[2025-04-21T04:20:43.556Z] 
+🌲 BUILD FILE TREE STARTED
+[2025-04-21T04:20:43.556Z] ==========================================
+[2025-04-21T04:20:43.556Z] Building file tree with config: {
+  "filename": "FileScopeMCP-tree.json",
+  "baseDirectory": "/home/yuval/WebstormProjects/electric/packages/vue-composables",
+  "projectRoot": "/home/yuval/WebstormProjects/electric/packages/vue-composables",
+  "lastUpdated": "2025-04-21T04:20:43.556Z"
+}
+[2025-04-21T04:20:43.556Z] Current working directory: /home/yuval/WebstormProjects/electric/packages/vue-composables
+[2025-04-21T04:20:43.556Z] Config in global state: ✅ YES
+[2025-04-21T04:20:43.557Z] Global config exclude patterns count: 0
+[2025-04-21T04:20:43.558Z] ❌ Failed to load existing file tree: Error: ENOENT: no such file or directory, open '/home/yuval/WebstormProjects/electric/packages/vue-composables/FileScopeMCP-tree.json'
+[2025-04-21T04:20:43.558Z] 🔍 Building new file tree for directory: /home/yuval/WebstormProjects/electric/packages/vue-composables
+[2025-04-21T04:20:43.559Z] 
+📁 SCAN DIRECTORY: /home/yuval/WebstormProjects/electric/packages/vue-composables
+[2025-04-21T04:20:43.559Z]   - Base dir: /home/yuval/WebstormProjects/electric/packages/vue-composables
+[2025-04-21T04:20:43.559Z]   - Normalized base dir: /home/yuval/WebstormProjects/electric/packages/vue-composables
+[2025-04-21T04:20:43.559Z]   - Normalized current dir: /home/yuval/WebstormProjects/electric/packages/vue-composables
+[2025-04-21T04:20:43.560Z]   - Read 12 entries in directory
+[2025-04-21T04:20:43.560Z] 
+  Processing 12 entries in /home/yuval/WebstormProjects/electric/packages/vue-composables...
+[2025-04-21T04:20:43.560Z] 
+🔍 BEFORE PROCESSING: Is config loaded? YES ✅
+[2025-04-21T04:20:43.561Z]   - Exclude patterns count: 0
+[2025-04-21T04:20:43.561Z] 
+  Entry: .eslintrc.cjs (file)
+[2025-04-21T04:20:43.561Z]   - Full path: /home/yuval/WebstormProjects/electric/packages/vue-composables/.eslintrc.cjs
+[2025-04-21T04:20:43.561Z]   🔍 Checking if path should be excluded: /home/yuval/WebstormProjects/electric/packages/vue-composables/.eslintrc.cjs
+[2025-04-21T04:20:43.561Z] 
+===== EXCLUDE CHECK for: /home/yuval/WebstormProjects/electric/packages/vue-composables/.eslintrc.cjs =====
+[2025-04-21T04:20:43.561Z] ❌ WARNING: No exclude patterns found in config!
+[2025-04-21T04:20:43.561Z] Config object: {
+  "baseDirectory": "/home/yuval/WebstormProjects/electric/packages/vue-composables",
+  "excludePatterns": [],
+  "fileWatching": {
+    "enabled": false,
+    "debounceMs": 300,
+    "ignoreDotFiles": true,
+    "autoRebuildTree": true,
+    "maxWatchedDirectories": 1000,
+    "watchForNewFiles": true,
+    "watchForDeleted": true,
+    "watchForChanged": true
+  },
+  "version": "1.0.0"
+}
+[2025-04-21T04:20:43.561Z]   🔍 Exclusion check result: INCLUDE ❌
+[2025-04-21T04:20:43.562Z]   - ✅ Including path: /home/yuval/WebstormProjects/electric/packages/vue-composables/.eslintrc.cjs
+[2025-04-21T04:20:43.562Z]   - Processing file: /home/yuval/WebstormProjects/electric/packages/vue-composables/.eslintrc.cjs
+[2025-04-21T04:20:43.562Z] 
+  Entry: .prettierignore (file)
+[2025-04-21T04:20:43.562Z]   - Full path: /home/yuval/WebstormProjects/electric/packages/vue-composables/.prettierignore
+[2025-04-21T04:20:43.562Z]   🔍 Checking if path should be excluded: /home/yuval/WebstormProjects/electric/packages/vue-composables/.prettierignore
+[2025-04-21T04:20:43.562Z] 
+===== EXCLUDE CHECK for: /home/yuval/WebstormProjects/electric/packages/vue-composables/.prettierignore =====
+[2025-04-21T04:20:43.562Z] ❌ WARNING: No exclude patterns found in config!
+[2025-04-21T04:20:43.562Z] Config object: {
+  "baseDirectory": "/home/yuval/WebstormProjects/electric/packages/vue-composables",
+  "excludePatterns": [],
+  "fileWatching": {
+    "enabled": false,
+    "debounceMs": 300,
+    "ignoreDotFiles": true,
+    "autoRebuildTree": true,
+    "maxWatchedDirectories": 1000,
+    "watchForNewFiles": true,
+    "watchForDeleted": true,
+    "watchForChanged": true
+  },
+  "version": "1.0.0"
+}
+[2025-04-21T04:20:43.562Z]   🔍 Exclusion check result: INCLUDE ❌
+[2025-04-21T04:20:43.563Z]   - ✅ Including path: /home/yuval/WebstormProjects/electric/packages/vue-composables/.prettierignore
+[2025-04-21T04:20:43.563Z]   - Processing file: /home/yuval/WebstormProjects/electric/packages/vue-composables/.prettierignore
+[2025-04-21T04:20:43.563Z] 
+  Entry: .prettierrc (file)
+[2025-04-21T04:20:43.563Z]   - Full path: /home/yuval/WebstormProjects/electric/packages/vue-composables/.prettierrc
+[2025-04-21T04:20:43.563Z]   🔍 Checking if path should be excluded: /home/yuval/WebstormProjects/electric/packages/vue-composables/.prettierrc
+[2025-04-21T04:20:43.563Z] 
+===== EXCLUDE CHECK for: /home/yuval/WebstormProjects/electric/packages/vue-composables/.prettierrc =====
+[2025-04-21T04:20:43.563Z] ❌ WARNING: No exclude patterns found in config!
+[2025-04-21T04:20:43.563Z] Config object: {
+  "baseDirectory": "/home/yuval/WebstormProjects/electric/packages/vue-composables",
+  "excludePatterns": [],
+  "fileWatching": {
+    "enabled": false,
+    "debounceMs": 300,
+    "ignoreDotFiles": true,
+    "autoRebuildTree": true,
+    "maxWatchedDirectories": 1000,
+    "watchForNewFiles": true,
+    "watchForDeleted": true,
+    "watchForChanged": true
+  },
+  "version": "1.0.0"
+}
+[2025-04-21T04:20:43.563Z]   🔍 Exclusion check result: INCLUDE ❌
+[2025-04-21T04:20:43.563Z]   - ✅ Including path: /home/yuval/WebstormProjects/electric/packages/vue-composables/.prettierrc
+[2025-04-21T04:20:43.563Z]   - Processing file: /home/yuval/WebstormProjects/electric/packages/vue-composables/.prettierrc
+[2025-04-21T04:20:43.563Z] 
+  Entry: mcp-debug.log (file)
+[2025-04-21T04:20:43.563Z]   - Full path: /home/yuval/WebstormProjects/electric/packages/vue-composables/mcp-debug.log
+[2025-04-21T04:20:43.563Z]   🔍 Checking if path should be excluded: /home/yuval/WebstormProjects/electric/packages/vue-composables/mcp-debug.log
+[2025-04-21T04:20:43.563Z] 
+===== EXCLUDE CHECK for: /home/yuval/WebstormProjects/electric/packages/vue-composables/mcp-debug.log =====
+[2025-04-21T04:20:43.563Z] ❌ WARNING: No exclude patterns found in config!
+[2025-04-21T04:20:43.563Z] Config object: {
+  "baseDirectory": "/home/yuval/WebstormProjects/electric/packages/vue-composables",
+  "excludePatterns": [],
+  "fileWatching": {
+    "enabled": false,
+    "debounceMs": 300,
+    "ignoreDotFiles": true,
+    "autoRebuildTree": true,
+    "maxWatchedDirectories": 1000,
+    "watchForNewFiles": true,
+    "watchForDeleted": true,
+    "watchForChanged": true
+  },
+  "version": "1.0.0"
+}
+[2025-04-21T04:20:43.563Z]   🔍 Exclusion check result: INCLUDE ❌
+[2025-04-21T04:20:43.563Z]   - ✅ Including path: /home/yuval/WebstormProjects/electric/packages/vue-composables/mcp-debug.log
+[2025-04-21T04:20:43.563Z]   - Processing file: /home/yuval/WebstormProjects/electric/packages/vue-composables/mcp-debug.log
+[2025-04-21T04:20:43.564Z] 
+  Entry: node_modules (directory)
+[2025-04-21T04:20:43.564Z]   - Full path: /home/yuval/WebstormProjects/electric/packages/vue-composables/node_modules
+[2025-04-21T04:20:43.564Z]   🔍 Checking if path should be excluded: /home/yuval/WebstormProjects/electric/packages/vue-composables/node_modules
+[2025-04-21T04:20:43.565Z] 🔴 SPECIAL CASE: node_modules directory/file detected: /home/yuval/WebstormProjects/electric/packages/vue-composables/node_modules
+[2025-04-21T04:20:43.565Z]   🔍 Exclusion check result: EXCLUDE ✅
+[2025-04-21T04:20:43.565Z]   - ✅ Skipping excluded path: /home/yuval/WebstormProjects/electric/packages/vue-composables/node_modules
+[2025-04-21T04:20:43.565Z] 
+  Entry: package.json (file)
+[2025-04-21T04:20:43.565Z]   - Full path: /home/yuval/WebstormProjects/electric/packages/vue-composables/package.json
+[2025-04-21T04:20:43.566Z]   🔍 Checking if path should be excluded: /home/yuval/WebstormProjects/electric/packages/vue-composables/package.json
+[2025-04-21T04:20:43.566Z] 
+===== EXCLUDE CHECK for: /home/yuval/WebstormProjects/electric/packages/vue-composables/package.json =====
+[2025-04-21T04:20:43.566Z] ❌ WARNING: No exclude patterns found in config!
+[2025-04-21T04:20:43.566Z] Config object: {
+  "baseDirectory": "/home/yuval/WebstormProjects/electric/packages/vue-composables",
+  "excludePatterns": [],
+  "fileWatching": {
+    "enabled": false,
+    "debounceMs": 300,
+    "ignoreDotFiles": true,
+    "autoRebuildTree": true,
+    "maxWatchedDirectories": 1000,
+    "watchForNewFiles": true,
+    "watchForDeleted": true,
+    "watchForChanged": true
+  },
+  "version": "1.0.0"
+}
+[2025-04-21T04:20:43.566Z]   🔍 Exclusion check result: INCLUDE ❌
+[2025-04-21T04:20:43.566Z]   - ✅ Including path: /home/yuval/WebstormProjects/electric/packages/vue-composables/package.json
+[2025-04-21T04:20:43.566Z]   - Processing file: /home/yuval/WebstormProjects/electric/packages/vue-composables/package.json
+[2025-04-21T04:20:43.567Z] 
+  Entry: src (directory)
+[2025-04-21T04:20:43.567Z]   - Full path: /home/yuval/WebstormProjects/electric/packages/vue-composables/src
+[2025-04-21T04:20:43.567Z]   🔍 Checking if path should be excluded: /home/yuval/WebstormProjects/electric/packages/vue-composables/src
+[2025-04-21T04:20:43.567Z] 
+===== EXCLUDE CHECK for: /home/yuval/WebstormProjects/electric/packages/vue-composables/src =====
+[2025-04-21T04:20:43.567Z] ❌ WARNING: No exclude patterns found in config!
+[2025-04-21T04:20:43.567Z] Config object: {
+  "baseDirectory": "/home/yuval/WebstormProjects/electric/packages/vue-composables",
+  "excludePatterns": [],
+  "fileWatching": {
+    "enabled": false,
+    "debounceMs": 300,
+    "ignoreDotFiles": true,
+    "autoRebuildTree": true,
+    "maxWatchedDirectories": 1000,
+    "watchForNewFiles": true,
+    "watchForDeleted": true,
+    "watchForChanged": true
+  },
+  "version": "1.0.0"
+}
+[2025-04-21T04:20:43.567Z]   🔍 Exclusion check result: INCLUDE ❌
+[2025-04-21T04:20:43.567Z]   - ✅ Including path: /home/yuval/WebstormProjects/electric/packages/vue-composables/src
+[2025-04-21T04:20:43.567Z]   - Processing directory: /home/yuval/WebstormProjects/electric/packages/vue-composables/src
+[2025-04-21T04:20:43.568Z] 
+📁 SCAN DIRECTORY: /home/yuval/WebstormProjects/electric/packages/vue-composables/src
+[2025-04-21T04:20:43.568Z]   - Base dir: /home/yuval/WebstormProjects/electric/packages/vue-composables
+[2025-04-21T04:20:43.568Z]   - Normalized base dir: /home/yuval/WebstormProjects/electric/packages/vue-composables
+[2025-04-21T04:20:43.568Z]   - Normalized current dir: /home/yuval/WebstormProjects/electric/packages/vue-composables/src
+[2025-04-21T04:20:43.568Z]   - Read 2 entries in directory
+[2025-04-21T04:20:43.568Z] 
+  Processing 2 entries in /home/yuval/WebstormProjects/electric/packages/vue-composables/src...
+[2025-04-21T04:20:43.568Z] 
+🔍 BEFORE PROCESSING: Is config loaded? YES ✅
+[2025-04-21T04:20:43.572Z]   - Exclude patterns count: 0
+[2025-04-21T04:20:43.572Z] 
+  Entry: index.ts (file)
+[2025-04-21T04:20:43.572Z]   - Full path: /home/yuval/WebstormProjects/electric/packages/vue-composables/src/index.ts
+[2025-04-21T04:20:43.572Z]   🔍 Checking if path should be excluded: /home/yuval/WebstormProjects/electric/packages/vue-composables/src/index.ts
+[2025-04-21T04:20:43.572Z] 
+===== EXCLUDE CHECK for: /home/yuval/WebstormProjects/electric/packages/vue-composables/src/index.ts =====
+[2025-04-21T04:20:43.572Z] ❌ WARNING: No exclude patterns found in config!
+[2025-04-21T04:20:43.572Z] Config object: {
+  "baseDirectory": "/home/yuval/WebstormProjects/electric/packages/vue-composables",
+  "excludePatterns": [],
+  "fileWatching": {
+    "enabled": false,
+    "debounceMs": 300,
+    "ignoreDotFiles": true,
+    "autoRebuildTree": true,
+    "maxWatchedDirectories": 1000,
+    "watchForNewFiles": true,
+    "watchForDeleted": true,
+    "watchForChanged": true
+  },
+  "version": "1.0.0"
+}
+[2025-04-21T04:20:43.572Z]   🔍 Exclusion check result: INCLUDE ❌
+[2025-04-21T04:20:43.572Z]   - ✅ Including path: /home/yuval/WebstormProjects/electric/packages/vue-composables/src/index.ts
+[2025-04-21T04:20:43.572Z]   - Processing file: /home/yuval/WebstormProjects/electric/packages/vue-composables/src/index.ts
+[2025-04-21T04:20:43.573Z] Found 0 potential imports in /home/yuval/WebstormProjects/electric/packages/vue-composables/src/index.ts
+[2025-04-21T04:20:43.574Z] 
+  Entry: use-shape.ts (file)
+[2025-04-21T04:20:43.574Z]   - Full path: /home/yuval/WebstormProjects/electric/packages/vue-composables/src/use-shape.ts
+[2025-04-21T04:20:43.578Z]   🔍 Checking if path should be excluded: /home/yuval/WebstormProjects/electric/packages/vue-composables/src/use-shape.ts
+[2025-04-21T04:20:43.578Z] 
+===== EXCLUDE CHECK for: /home/yuval/WebstormProjects/electric/packages/vue-composables/src/use-shape.ts =====
+[2025-04-21T04:20:43.578Z] ❌ WARNING: No exclude patterns found in config!
+[2025-04-21T04:20:43.578Z] Config object: {
+  "baseDirectory": "/home/yuval/WebstormProjects/electric/packages/vue-composables",
+  "excludePatterns": [],
+  "fileWatching": {
+    "enabled": false,
+    "debounceMs": 300,
+    "ignoreDotFiles": true,
+    "autoRebuildTree": true,
+    "maxWatchedDirectories": 1000,
+    "watchForNewFiles": true,
+    "watchForDeleted": true,
+    "watchForChanged": true
+  },
+  "version": "1.0.0"
+}
+[2025-04-21T04:20:43.578Z]   🔍 Exclusion check result: INCLUDE ❌
+[2025-04-21T04:20:43.578Z]   - ✅ Including path: /home/yuval/WebstormProjects/electric/packages/vue-composables/src/use-shape.ts
+[2025-04-21T04:20:43.578Z]   - Processing file: /home/yuval/WebstormProjects/electric/packages/vue-composables/src/use-shape.ts
+[2025-04-21T04:20:43.579Z] Found 2 potential imports in /home/yuval/WebstormProjects/electric/packages/vue-composables/src/use-shape.ts
+[2025-04-21T04:20:43.579Z] Resolving import path: @electric-sql/client from file: /home/yuval/WebstormProjects/electric/packages/vue-composables/src/use-shape.ts
+[2025-04-21T04:20:43.579Z] Resolved package import to: /home/yuval/WebstormProjects/electric/packages/vue-composables/node_modules/@electric-sql/client
+[2025-04-21T04:20:43.579Z] Resolved path: /home/yuval/WebstormProjects/electric/packages/vue-composables/node_modules/@electric-sql/client
+[2025-04-21T04:20:43.581Z] Resolving import path: vue from file: /home/yuval/WebstormProjects/electric/packages/vue-composables/src/use-shape.ts
+[2025-04-21T04:20:43.581Z] Resolved package import to: /home/yuval/WebstormProjects/electric/packages/vue-composables/node_modules/vue
+[2025-04-21T04:20:43.581Z] Resolved path: /home/yuval/WebstormProjects/electric/packages/vue-composables/node_modules/vue
+[2025-04-21T04:20:43.582Z] 
+  📊 DIRECTORY SCAN SUMMARY for /home/yuval/WebstormProjects/electric/packages/vue-composables/src:
+[2025-04-21T04:20:43.582Z]     - Total entries: 2
+[2025-04-21T04:20:43.582Z]     - Excluded: 0
+[2025-04-21T04:20:43.582Z]     - Included: 2
+[2025-04-21T04:20:43.583Z]     - Directories processed: 0
+[2025-04-21T04:20:43.583Z]     - Files processed: 2
+[2025-04-21T04:20:43.583Z]   📁 END SCAN DIRECTORY: /home/yuval/WebstormProjects/electric/packages/vue-composables/src
+
+[2025-04-21T04:20:43.583Z] 
+  Entry: test (directory)
+[2025-04-21T04:20:43.583Z]   - Full path: /home/yuval/WebstormProjects/electric/packages/vue-composables/test
+[2025-04-21T04:20:43.583Z]   🔍 Checking if path should be excluded: /home/yuval/WebstormProjects/electric/packages/vue-composables/test
+[2025-04-21T04:20:43.583Z] 
+===== EXCLUDE CHECK for: /home/yuval/WebstormProjects/electric/packages/vue-composables/test =====
+[2025-04-21T04:20:43.583Z] ❌ WARNING: No exclude patterns found in config!
+[2025-04-21T04:20:43.583Z] Config object: {
+  "baseDirectory": "/home/yuval/WebstormProjects/electric/packages/vue-composables",
+  "excludePatterns": [],
+  "fileWatching": {
+    "enabled": false,
+    "debounceMs": 300,
+    "ignoreDotFiles": true,
+    "autoRebuildTree": true,
+    "maxWatchedDirectories": 1000,
+    "watchForNewFiles": true,
+    "watchForDeleted": true,
+    "watchForChanged": true
+  },
+  "version": "1.0.0"
+}
+[2025-04-21T04:20:43.584Z]   🔍 Exclusion check result: INCLUDE ❌
+[2025-04-21T04:20:43.584Z]   - ✅ Including path: /home/yuval/WebstormProjects/electric/packages/vue-composables/test
+[2025-04-21T04:20:43.584Z]   - Processing directory: /home/yuval/WebstormProjects/electric/packages/vue-composables/test
+[2025-04-21T04:20:43.584Z] 
+📁 SCAN DIRECTORY: /home/yuval/WebstormProjects/electric/packages/vue-composables/test
+[2025-04-21T04:20:43.584Z]   - Base dir: /home/yuval/WebstormProjects/electric/packages/vue-composables
+[2025-04-21T04:20:43.584Z]   - Normalized base dir: /home/yuval/WebstormProjects/electric/packages/vue-composables
+[2025-04-21T04:20:43.584Z]   - Normalized current dir: /home/yuval/WebstormProjects/electric/packages/vue-composables/test
+[2025-04-21T04:20:43.584Z]   - Read 1 entries in directory
+[2025-04-21T04:20:43.584Z] 
+  Processing 1 entries in /home/yuval/WebstormProjects/electric/packages/vue-composables/test...
+[2025-04-21T04:20:43.585Z] 
+🔍 BEFORE PROCESSING: Is config loaded? YES ✅
+[2025-04-21T04:20:43.585Z]   - Exclude patterns count: 0
+[2025-04-21T04:20:43.585Z] 
+  Entry: support (directory)
+[2025-04-21T04:20:43.585Z]   - Full path: /home/yuval/WebstormProjects/electric/packages/vue-composables/test/support
+[2025-04-21T04:20:43.585Z]   🔍 Checking if path should be excluded: /home/yuval/WebstormProjects/electric/packages/vue-composables/test/support
+[2025-04-21T04:20:43.585Z] 
+===== EXCLUDE CHECK for: /home/yuval/WebstormProjects/electric/packages/vue-composables/test/support =====
+[2025-04-21T04:20:43.585Z] ❌ WARNING: No exclude patterns found in config!
+[2025-04-21T04:20:43.585Z] Config object: {
+  "baseDirectory": "/home/yuval/WebstormProjects/electric/packages/vue-composables",
+  "excludePatterns": [],
+  "fileWatching": {
+    "enabled": false,
+    "debounceMs": 300,
+    "ignoreDotFiles": true,
+    "autoRebuildTree": true,
+    "maxWatchedDirectories": 1000,
+    "watchForNewFiles": true,
+    "watchForDeleted": true,
+    "watchForChanged": true
+  },
+  "version": "1.0.0"
+}
+[2025-04-21T04:20:43.585Z]   🔍 Exclusion check result: INCLUDE ❌
+[2025-04-21T04:20:43.585Z]   - ✅ Including path: /home/yuval/WebstormProjects/electric/packages/vue-composables/test/support
+[2025-04-21T04:20:43.585Z]   - Processing directory: /home/yuval/WebstormProjects/electric/packages/vue-composables/test/support
+[2025-04-21T04:20:43.585Z] 
+📁 SCAN DIRECTORY: /home/yuval/WebstormProjects/electric/packages/vue-composables/test/support
+[2025-04-21T04:20:43.585Z]   - Base dir: /home/yuval/WebstormProjects/electric/packages/vue-composables
+[2025-04-21T04:20:43.586Z]   - Normalized base dir: /home/yuval/WebstormProjects/electric/packages/vue-composables
+[2025-04-21T04:20:43.586Z]   - Normalized current dir: /home/yuval/WebstormProjects/electric/packages/vue-composables/test/support
+[2025-04-21T04:20:43.586Z]   - Read 3 entries in directory
+[2025-04-21T04:20:43.586Z] 
+  Processing 3 entries in /home/yuval/WebstormProjects/electric/packages/vue-composables/test/support...
+[2025-04-21T04:20:43.586Z] 
+🔍 BEFORE PROCESSING: Is config loaded? YES ✅
+[2025-04-21T04:20:43.586Z]   - Exclude patterns count: 0
+[2025-04-21T04:20:43.586Z] 
+  Entry: global-setup.ts (file)
+[2025-04-21T04:20:43.586Z]   - Full path: /home/yuval/WebstormProjects/electric/packages/vue-composables/test/support/global-setup.ts
+[2025-04-21T04:20:43.587Z]   🔍 Checking if path should be excluded: /home/yuval/WebstormProjects/electric/packages/vue-composables/test/support/global-setup.ts
+[2025-04-21T04:20:43.587Z] 
+===== EXCLUDE CHECK for: /home/yuval/WebstormProjects/electric/packages/vue-composables/test/support/global-setup.ts =====
+[2025-04-21T04:20:43.587Z] ❌ WARNING: No exclude patterns found in config!
+[2025-04-21T04:20:43.587Z] Config object: {
+  "baseDirectory": "/home/yuval/WebstormProjects/electric/packages/vue-composables",
+  "excludePatterns": [],
+  "fileWatching": {
+    "enabled": false,
+    "debounceMs": 300,
+    "ignoreDotFiles": true,
+    "autoRebuildTree": true,
+    "maxWatchedDirectories": 1000,
+    "watchForNewFiles": true,
+    "watchForDeleted": true,
+    "watchForChanged": true
+  },
+  "version": "1.0.0"
+}
+[2025-04-21T04:20:43.587Z]   🔍 Exclusion check result: INCLUDE ❌
+[2025-04-21T04:20:43.587Z]   - ✅ Including path: /home/yuval/WebstormProjects/electric/packages/vue-composables/test/support/global-setup.ts
+[2025-04-21T04:20:43.587Z]   - Processing file: /home/yuval/WebstormProjects/electric/packages/vue-composables/test/support/global-setup.ts
+[2025-04-21T04:20:43.590Z] Found 2 potential imports in /home/yuval/WebstormProjects/electric/packages/vue-composables/test/support/global-setup.ts
+[2025-04-21T04:20:43.590Z] Resolving import path: vitest/node from file: /home/yuval/WebstormProjects/electric/packages/vue-composables/test/support/global-setup.ts
+[2025-04-21T04:20:43.590Z] Resolved package import to: /home/yuval/WebstormProjects/electric/packages/vue-composables/node_modules/vitest/node
+[2025-04-21T04:20:43.590Z] Resolved path: /home/yuval/WebstormProjects/electric/packages/vue-composables/node_modules/vitest/node
+[2025-04-21T04:20:43.591Z] Resolving import path: ./test-helpers from file: /home/yuval/WebstormProjects/electric/packages/vue-composables/test/support/global-setup.ts
+[2025-04-21T04:20:43.591Z] Resolved relative import to: /home/yuval/WebstormProjects/electric/packages/vue-composables/test/support/test-helpers
+[2025-04-21T04:20:43.591Z] Resolved path: /home/yuval/WebstormProjects/electric/packages/vue-composables/test/support/test-helpers
+[2025-04-21T04:20:43.591Z] Found existing path: /home/yuval/WebstormProjects/electric/packages/vue-composables/test/support/test-helpers.ts
+[2025-04-21T04:20:43.592Z] 
+  Entry: test-context.ts (file)
+[2025-04-21T04:20:43.592Z]   - Full path: /home/yuval/WebstormProjects/electric/packages/vue-composables/test/support/test-context.ts
+[2025-04-21T04:20:43.592Z]   🔍 Checking if path should be excluded: /home/yuval/WebstormProjects/electric/packages/vue-composables/test/support/test-context.ts
+[2025-04-21T04:20:43.592Z] 
+===== EXCLUDE CHECK for: /home/yuval/WebstormProjects/electric/packages/vue-composables/test/support/test-context.ts =====
+[2025-04-21T04:20:43.592Z] ❌ WARNING: No exclude patterns found in config!
+[2025-04-21T04:20:43.592Z] Config object: {
+  "baseDirectory": "/home/yuval/WebstormProjects/electric/packages/vue-composables",
+  "excludePatterns": [],
+  "fileWatching": {
+    "enabled": false,
+    "debounceMs": 300,
+    "ignoreDotFiles": true,
+    "autoRebuildTree": true,
+    "maxWatchedDirectories": 1000,
+    "watchForNewFiles": true,
+    "watchForDeleted": true,
+    "watchForChanged": true
+  },
+  "version": "1.0.0"
+}
+[2025-04-21T04:20:43.592Z]   🔍 Exclusion check result: INCLUDE ❌
+[2025-04-21T04:20:43.592Z]   - ✅ Including path: /home/yuval/WebstormProjects/electric/packages/vue-composables/test/support/test-context.ts
+[2025-04-21T04:20:43.592Z]   - Processing file: /home/yuval/WebstormProjects/electric/packages/vue-composables/test/support/test-context.ts
+[2025-04-21T04:20:43.592Z] Found 5 potential imports in /home/yuval/WebstormProjects/electric/packages/vue-composables/test/support/test-context.ts
+[2025-04-21T04:20:43.593Z] Resolving import path: uuid from file: /home/yuval/WebstormProjects/electric/packages/vue-composables/test/support/test-context.ts
+[2025-04-21T04:20:43.593Z] Resolved package import to: /home/yuval/WebstormProjects/electric/packages/vue-composables/node_modules/uuid
+[2025-04-21T04:20:43.593Z] Resolved path: /home/yuval/WebstormProjects/electric/packages/vue-composables/node_modules/uuid
+[2025-04-21T04:20:43.594Z] Resolving import path: pg from file: /home/yuval/WebstormProjects/electric/packages/vue-composables/test/support/test-context.ts
+[2025-04-21T04:20:43.594Z] Resolved package import to: /home/yuval/WebstormProjects/electric/packages/vue-composables/node_modules/pg
+[2025-04-21T04:20:43.594Z] Resolved path: /home/yuval/WebstormProjects/electric/packages/vue-composables/node_modules/pg
+[2025-04-21T04:20:43.595Z] Resolving import path: vitest from file: /home/yuval/WebstormProjects/electric/packages/vue-composables/test/support/test-context.ts
+[2025-04-21T04:20:43.595Z] Resolved package import to: /home/yuval/WebstormProjects/electric/packages/vue-composables/node_modules/vitest
+[2025-04-21T04:20:43.595Z] Resolved path: /home/yuval/WebstormProjects/electric/packages/vue-composables/node_modules/vitest
+[2025-04-21T04:20:43.595Z] Resolving import path: ./test-helpers from file: /home/yuval/WebstormProjects/electric/packages/vue-composables/test/support/test-context.ts
+[2025-04-21T04:20:43.596Z] Resolved relative import to: /home/yuval/WebstormProjects/electric/packages/vue-composables/test/support/test-helpers
+[2025-04-21T04:20:43.596Z] Resolved path: /home/yuval/WebstormProjects/electric/packages/vue-composables/test/support/test-helpers
+[2025-04-21T04:20:43.596Z] Found existing path: /home/yuval/WebstormProjects/electric/packages/vue-composables/test/support/test-helpers.ts
+[2025-04-21T04:20:43.596Z] Resolving import path: @electric-sql/client from file: /home/yuval/WebstormProjects/electric/packages/vue-composables/test/support/test-context.ts
+[2025-04-21T04:20:43.596Z] Resolved package import to: /home/yuval/WebstormProjects/electric/packages/vue-composables/node_modules/@electric-sql/client
+[2025-04-21T04:20:43.596Z] Resolved path: /home/yuval/WebstormProjects/electric/packages/vue-composables/node_modules/@electric-sql/client
+[2025-04-21T04:20:43.597Z] 
+  Entry: test-helpers.ts (file)
+[2025-04-21T04:20:43.597Z]   - Full path: /home/yuval/WebstormProjects/electric/packages/vue-composables/test/support/test-helpers.ts
+[2025-04-21T04:20:43.597Z]   🔍 Checking if path should be excluded: /home/yuval/WebstormProjects/electric/packages/vue-composables/test/support/test-helpers.ts
+[2025-04-21T04:20:43.597Z] 
+===== EXCLUDE CHECK for: /home/yuval/WebstormProjects/electric/packages/vue-composables/test/support/test-helpers.ts =====
+[2025-04-21T04:20:43.597Z] ❌ WARNING: No exclude patterns found in config!
+[2025-04-21T04:20:43.597Z] Config object: {
+  "baseDirectory": "/home/yuval/WebstormProjects/electric/packages/vue-composables",
+  "excludePatterns": [],
+  "fileWatching": {
+    "enabled": false,
+    "debounceMs": 300,
+    "ignoreDotFiles": true,
+    "autoRebuildTree": true,
+    "maxWatchedDirectories": 1000,
+    "watchForNewFiles": true,
+    "watchForDeleted": true,
+    "watchForChanged": true
+  },
+  "version": "1.0.0"
+}
+[2025-04-21T04:20:43.597Z]   🔍 Exclusion check result: INCLUDE ❌
+[2025-04-21T04:20:43.597Z]   - ✅ Including path: /home/yuval/WebstormProjects/electric/packages/vue-composables/test/support/test-helpers.ts
+[2025-04-21T04:20:43.597Z]   - Processing file: /home/yuval/WebstormProjects/electric/packages/vue-composables/test/support/test-helpers.ts
+[2025-04-21T04:20:43.603Z] Found 2 potential imports in /home/yuval/WebstormProjects/electric/packages/vue-composables/test/support/test-helpers.ts
+[2025-04-21T04:20:43.603Z] Resolving import path: @electric-sql/client from file: /home/yuval/WebstormProjects/electric/packages/vue-composables/test/support/test-helpers.ts
+[2025-04-21T04:20:43.603Z] Resolved package import to: /home/yuval/WebstormProjects/electric/packages/vue-composables/node_modules/@electric-sql/client
+[2025-04-21T04:20:43.603Z] Resolved path: /home/yuval/WebstormProjects/electric/packages/vue-composables/node_modules/@electric-sql/client
+[2025-04-21T04:20:43.604Z] Resolving import path: pg from file: /home/yuval/WebstormProjects/electric/packages/vue-composables/test/support/test-helpers.ts
+[2025-04-21T04:20:43.604Z] Resolved package import to: /home/yuval/WebstormProjects/electric/packages/vue-composables/node_modules/pg
+[2025-04-21T04:20:43.604Z] Resolved path: /home/yuval/WebstormProjects/electric/packages/vue-composables/node_modules/pg
+[2025-04-21T04:20:43.605Z] 
+  📊 DIRECTORY SCAN SUMMARY for /home/yuval/WebstormProjects/electric/packages/vue-composables/test/support:
+[2025-04-21T04:20:43.605Z]     - Total entries: 3
+[2025-04-21T04:20:43.605Z]     - Excluded: 0
+[2025-04-21T04:20:43.605Z]     - Included: 3
+[2025-04-21T04:20:43.605Z]     - Directories processed: 0
+[2025-04-21T04:20:43.606Z]     - Files processed: 3
+[2025-04-21T04:20:43.606Z]   📁 END SCAN DIRECTORY: /home/yuval/WebstormProjects/electric/packages/vue-composables/test/support
+
+[2025-04-21T04:20:43.606Z] 
+  📊 DIRECTORY SCAN SUMMARY for /home/yuval/WebstormProjects/electric/packages/vue-composables/test:
+[2025-04-21T04:20:43.606Z]     - Total entries: 1
+[2025-04-21T04:20:43.606Z]     - Excluded: 0
+[2025-04-21T04:20:43.606Z]     - Included: 1
+[2025-04-21T04:20:43.606Z]     - Directories processed: 1
+[2025-04-21T04:20:43.606Z]     - Files processed: 0
+[2025-04-21T04:20:43.606Z]   📁 END SCAN DIRECTORY: /home/yuval/WebstormProjects/electric/packages/vue-composables/test
+
+[2025-04-21T04:20:43.606Z] 
+  Entry: tsconfig.build.json (file)
+[2025-04-21T04:20:43.606Z]   - Full path: /home/yuval/WebstormProjects/electric/packages/vue-composables/tsconfig.build.json
+[2025-04-21T04:20:43.606Z]   🔍 Checking if path should be excluded: /home/yuval/WebstormProjects/electric/packages/vue-composables/tsconfig.build.json
+[2025-04-21T04:20:43.606Z] 
+===== EXCLUDE CHECK for: /home/yuval/WebstormProjects/electric/packages/vue-composables/tsconfig.build.json =====
+[2025-04-21T04:20:43.606Z] ❌ WARNING: No exclude patterns found in config!
+[2025-04-21T04:20:43.606Z] Config object: {
+  "baseDirectory": "/home/yuval/WebstormProjects/electric/packages/vue-composables",
+  "excludePatterns": [],
+  "fileWatching": {
+    "enabled": false,
+    "debounceMs": 300,
+    "ignoreDotFiles": true,
+    "autoRebuildTree": true,
+    "maxWatchedDirectories": 1000,
+    "watchForNewFiles": true,
+    "watchForDeleted": true,
+    "watchForChanged": true
+  },
+  "version": "1.0.0"
+}
+[2025-04-21T04:20:43.606Z]   🔍 Exclusion check result: INCLUDE ❌
+[2025-04-21T04:20:43.606Z]   - ✅ Including path: /home/yuval/WebstormProjects/electric/packages/vue-composables/tsconfig.build.json
+[2025-04-21T04:20:43.606Z]   - Processing file: /home/yuval/WebstormProjects/electric/packages/vue-composables/tsconfig.build.json
+[2025-04-21T04:20:43.606Z] 
+  Entry: tsconfig.json (file)
+[2025-04-21T04:20:43.606Z]   - Full path: /home/yuval/WebstormProjects/electric/packages/vue-composables/tsconfig.json
+[2025-04-21T04:20:43.606Z]   🔍 Checking if path should be excluded: /home/yuval/WebstormProjects/electric/packages/vue-composables/tsconfig.json
+[2025-04-21T04:20:43.606Z] 
+===== EXCLUDE CHECK for: /home/yuval/WebstormProjects/electric/packages/vue-composables/tsconfig.json =====
+[2025-04-21T04:20:43.606Z] ❌ WARNING: No exclude patterns found in config!
+[2025-04-21T04:20:43.606Z] Config object: {
+  "baseDirectory": "/home/yuval/WebstormProjects/electric/packages/vue-composables",
+  "excludePatterns": [],
+  "fileWatching": {
+    "enabled": false,
+    "debounceMs": 300,
+    "ignoreDotFiles": true,
+    "autoRebuildTree": true,
+    "maxWatchedDirectories": 1000,
+    "watchForNewFiles": true,
+    "watchForDeleted": true,
+    "watchForChanged": true
+  },
+  "version": "1.0.0"
+}
+[2025-04-21T04:20:43.606Z]   🔍 Exclusion check result: INCLUDE ❌
+[2025-04-21T04:20:43.607Z]   - ✅ Including path: /home/yuval/WebstormProjects/electric/packages/vue-composables/tsconfig.json
+[2025-04-21T04:20:43.607Z]   - Processing file: /home/yuval/WebstormProjects/electric/packages/vue-composables/tsconfig.json
+[2025-04-21T04:20:43.607Z] 
+  Entry: tsup.config.ts (file)
+[2025-04-21T04:20:43.607Z]   - Full path: /home/yuval/WebstormProjects/electric/packages/vue-composables/tsup.config.ts
+[2025-04-21T04:20:43.607Z]   🔍 Checking if path should be excluded: /home/yuval/WebstormProjects/electric/packages/vue-composables/tsup.config.ts
+[2025-04-21T04:20:43.607Z] 
+===== EXCLUDE CHECK for: /home/yuval/WebstormProjects/electric/packages/vue-composables/tsup.config.ts =====
+[2025-04-21T04:20:43.607Z] ❌ WARNING: No exclude patterns found in config!
+[2025-04-21T04:20:43.607Z] Config object: {
+  "baseDirectory": "/home/yuval/WebstormProjects/electric/packages/vue-composables",
+  "excludePatterns": [],
+  "fileWatching": {
+    "enabled": false,
+    "debounceMs": 300,
+    "ignoreDotFiles": true,
+    "autoRebuildTree": true,
+    "maxWatchedDirectories": 1000,
+    "watchForNewFiles": true,
+    "watchForDeleted": true,
+    "watchForChanged": true
+  },
+  "version": "1.0.0"
+}
+[2025-04-21T04:20:43.607Z]   🔍 Exclusion check result: INCLUDE ❌
+[2025-04-21T04:20:43.607Z]   - ✅ Including path: /home/yuval/WebstormProjects/electric/packages/vue-composables/tsup.config.ts
+[2025-04-21T04:20:43.607Z]   - Processing file: /home/yuval/WebstormProjects/electric/packages/vue-composables/tsup.config.ts
+[2025-04-21T04:20:43.608Z] Found 2 potential imports in /home/yuval/WebstormProjects/electric/packages/vue-composables/tsup.config.ts
+[2025-04-21T04:20:43.608Z] Resolving import path: tsup from file: /home/yuval/WebstormProjects/electric/packages/vue-composables/tsup.config.ts
+[2025-04-21T04:20:43.608Z] Resolved package import to: /home/yuval/WebstormProjects/electric/packages/vue-composables/node_modules/tsup
+[2025-04-21T04:20:43.608Z] Resolved path: /home/yuval/WebstormProjects/electric/packages/vue-composables/node_modules/tsup
+[2025-04-21T04:20:43.609Z] Resolving import path: tsup from file: /home/yuval/WebstormProjects/electric/packages/vue-composables/tsup.config.ts
+[2025-04-21T04:20:43.609Z] Resolved package import to: /home/yuval/WebstormProjects/electric/packages/vue-composables/node_modules/tsup
+[2025-04-21T04:20:43.609Z] Resolved path: /home/yuval/WebstormProjects/electric/packages/vue-composables/node_modules/tsup
+[2025-04-21T04:20:43.610Z] 
+  Entry: vitest.config.ts (file)
+[2025-04-21T04:20:43.610Z]   - Full path: /home/yuval/WebstormProjects/electric/packages/vue-composables/vitest.config.ts
+[2025-04-21T04:20:43.610Z]   🔍 Checking if path should be excluded: /home/yuval/WebstormProjects/electric/packages/vue-composables/vitest.config.ts
+[2025-04-21T04:20:43.610Z] 
+===== EXCLUDE CHECK for: /home/yuval/WebstormProjects/electric/packages/vue-composables/vitest.config.ts =====
+[2025-04-21T04:20:43.610Z] ❌ WARNING: No exclude patterns found in config!
+[2025-04-21T04:20:43.610Z] Config object: {
+  "baseDirectory": "/home/yuval/WebstormProjects/electric/packages/vue-composables",
+  "excludePatterns": [],
+  "fileWatching": {
+    "enabled": false,
+    "debounceMs": 300,
+    "ignoreDotFiles": true,
+    "autoRebuildTree": true,
+    "maxWatchedDirectories": 1000,
+    "watchForNewFiles": true,
+    "watchForDeleted": true,
+    "watchForChanged": true
+  },
+  "version": "1.0.0"
+}
+[2025-04-21T04:20:43.610Z]   🔍 Exclusion check result: INCLUDE ❌
+[2025-04-21T04:20:43.611Z]   - ✅ Including path: /home/yuval/WebstormProjects/electric/packages/vue-composables/vitest.config.ts
+[2025-04-21T04:20:43.611Z]   - Processing file: /home/yuval/WebstormProjects/electric/packages/vue-composables/vitest.config.ts
+[2025-04-21T04:20:43.611Z] Found 1 potential imports in /home/yuval/WebstormProjects/electric/packages/vue-composables/vitest.config.ts
+[2025-04-21T04:20:43.611Z] Resolving import path: vitest/config from file: /home/yuval/WebstormProjects/electric/packages/vue-composables/vitest.config.ts
+[2025-04-21T04:20:43.611Z] Resolved package import to: /home/yuval/WebstormProjects/electric/packages/vue-composables/node_modules/vitest/config
+[2025-04-21T04:20:43.611Z] Resolved path: /home/yuval/WebstormProjects/electric/packages/vue-composables/node_modules/vitest/config
+[2025-04-21T04:20:43.612Z] 
+  📊 DIRECTORY SCAN SUMMARY for /home/yuval/WebstormProjects/electric/packages/vue-composables:
+[2025-04-21T04:20:43.612Z]     - Total entries: 12
+[2025-04-21T04:20:43.612Z]     - Excluded: 1
+[2025-04-21T04:20:43.612Z]     - Included: 11
+[2025-04-21T04:20:43.613Z]     - Directories processed: 2
+[2025-04-21T04:20:43.613Z]     - Files processed: 9
+[2025-04-21T04:20:43.613Z]   📁 END SCAN DIRECTORY: /home/yuval/WebstormProjects/electric/packages/vue-composables
+
+[2025-04-21T04:20:43.613Z] ✅ Successfully scanned directory, found 11 top-level entries
+[2025-04-21T04:20:43.613Z] 📊 Building dependency map...
+[2025-04-21T04:20:43.613Z] 📈 Calculating importance values...
+[2025-04-21T04:20:43.614Z] 💾 Saving file tree to: FileScopeMCP-tree.json
+[2025-04-21T04:20:43.615Z] ✅ Successfully saved file tree
+[2025-04-21T04:20:43.615Z] 🌲 BUILD FILE TREE COMPLETED (built from scratch)
+[2025-04-21T04:20:43.615Z] ==========================================
+
+[2025-04-21T04:20:43.615Z] File watching is disabled in config
+[2025-04-21T04:26:50.223Z] Starting FileScopeMCP server initialization
+[2025-04-21T04:26:50.226Z] Initial working directory: /home/yuval/WebstormProjects/electric/packages/vue-composables
+[2025-04-21T04:26:50.226Z] Command line args: /home/yuval/.nvm/versions/node/v20.18.2/bin/node,/home/yuval/mcp-servers/file-scope/dist/mcp-server.js,--base-dir=./
+[2025-04-21T04:26:50.227Z] ========== CONFIG DEBUGGING ==========
+[2025-04-21T04:26:50.227Z] Loaded config: {
+  "baseDirectory": "",
+  "excludePatterns": [],
+  "fileWatching": {
+    "enabled": false,
+    "debounceMs": 300,
+    "ignoreDotFiles": true,
+    "autoRebuildTree": true,
+    "maxWatchedDirectories": 1000,
+    "watchForNewFiles": true,
+    "watchForDeleted": true,
+    "watchForChanged": true
+  },
+  "version": "1.0.0"
+}
+[2025-04-21T04:26:50.227Z] Exclude patterns count: 0
+[2025-04-21T04:26:50.227Z] =====================================
+[2025-04-21T04:26:50.227Z] Using base directory from command line: /home/yuval/WebstormProjects/electric/packages/vue-composables
+[2025-04-21T04:26:50.228Z] Global state after initialization:
+[2025-04-21T04:26:50.229Z] - Project root: /home/yuval/WebstormProjects/electric/packages/vue-composables
+[2025-04-21T04:26:50.229Z] - Config loaded: true
+[2025-04-21T04:26:50.229Z] - Exclude patterns count: 0
+[2025-04-21T04:26:50.229Z] Changed working directory to: /home/yuval/WebstormProjects/electric/packages/vue-composables
+[2025-04-21T04:26:50.229Z] 
+🌲 BUILD FILE TREE STARTED
+[2025-04-21T04:26:50.229Z] ==========================================
+[2025-04-21T04:26:50.229Z] Building file tree with config: {
+  "filename": "FileScopeMCP-tree.json",
+  "baseDirectory": "/home/yuval/WebstormProjects/electric/packages/vue-composables",
+  "projectRoot": "/home/yuval/WebstormProjects/electric/packages/vue-composables",
+  "lastUpdated": "2025-04-21T04:26:50.229Z"
+}
+[2025-04-21T04:26:50.229Z] Current working directory: /home/yuval/WebstormProjects/electric/packages/vue-composables
+[2025-04-21T04:26:50.229Z] Config in global state: ✅ YES
+[2025-04-21T04:26:50.229Z] Global config exclude patterns count: 0
+[2025-04-21T04:26:50.230Z] ✅ Using existing file tree from: FileScopeMCP-tree.json
+[2025-04-21T04:26:50.230Z] Tree root path: /home/yuval/WebstormProjects/electric/packages/vue-composables
+[2025-04-21T04:26:50.230Z] Tree has children: 11
+[2025-04-21T04:26:50.230Z] 🌲 BUILD FILE TREE COMPLETED (loaded from file)
+[2025-04-21T04:26:50.230Z] ==========================================
+
+[2025-04-21T04:26:50.230Z] File watching is disabled in config
+[2025-04-21T04:35:48.946Z] Starting FileScopeMCP server initialization
+[2025-04-21T04:35:48.952Z] Initial working directory: /home/yuval/WebstormProjects/electric/packages/vue-composables
+[2025-04-21T04:35:48.952Z] Command line args: /home/yuval/.nvm/versions/node/v20.18.2/bin/node,/home/yuval/mcp-servers/file-scope/dist/mcp-server.js,--base-dir=./
+[2025-04-21T04:35:48.956Z] ========== CONFIG DEBUGGING ==========
+[2025-04-21T04:35:48.956Z] Loaded config: {
+  "baseDirectory": "",
+  "excludePatterns": [],
+  "fileWatching": {
+    "enabled": false,
+    "debounceMs": 300,
+    "ignoreDotFiles": true,
+    "autoRebuildTree": true,
+    "maxWatchedDirectories": 1000,
+    "watchForNewFiles": true,
+    "watchForDeleted": true,
+    "watchForChanged": true
+  },
+  "version": "1.0.0"
+}
+[2025-04-21T04:35:48.956Z] Exclude patterns count: 0
+[2025-04-21T04:35:48.956Z] =====================================
+[2025-04-21T04:35:48.957Z] Using base directory from command line: /home/yuval/WebstormProjects/electric/packages/vue-composables
+[2025-04-21T04:35:48.959Z] Global state after initialization:
+[2025-04-21T04:35:48.959Z] - Project root: /home/yuval/WebstormProjects/electric/packages/vue-composables
+[2025-04-21T04:35:48.959Z] - Config loaded: true
+[2025-04-21T04:35:48.959Z] - Exclude patterns count: 0
+[2025-04-21T04:35:48.965Z] Changed working directory to: /home/yuval/WebstormProjects/electric/packages/vue-composables
+[2025-04-21T04:35:48.966Z] 
+🌲 BUILD FILE TREE STARTED
+[2025-04-21T04:35:48.966Z] ==========================================
+[2025-04-21T04:35:48.966Z] Building file tree with config: {
+  "filename": "FileScopeMCP-tree.json",
+  "baseDirectory": "/home/yuval/WebstormProjects/electric/packages/vue-composables",
+  "projectRoot": "/home/yuval/WebstormProjects/electric/packages/vue-composables",
+  "lastUpdated": "2025-04-21T04:35:48.965Z"
+}
+[2025-04-21T04:35:48.966Z] Current working directory: /home/yuval/WebstormProjects/electric/packages/vue-composables
+[2025-04-21T04:35:48.966Z] Config in global state: ✅ YES
+[2025-04-21T04:35:48.966Z] Global config exclude patterns count: 0
+[2025-04-21T04:35:48.967Z] ✅ Using existing file tree from: FileScopeMCP-tree.json
+[2025-04-21T04:35:48.967Z] Tree root path: /home/yuval/WebstormProjects/electric/packages/vue-composables
+[2025-04-21T04:35:48.967Z] Tree has children: 11
+[2025-04-21T04:35:48.967Z] 🌲 BUILD FILE TREE COMPLETED (loaded from file)
+[2025-04-21T04:35:48.967Z] ==========================================
+
+[2025-04-21T04:35:48.967Z] File watching is disabled in config
+[2025-04-24T04:04:22.280Z] Starting FileScopeMCP server initialization
+[2025-04-24T04:04:22.286Z] Initial working directory: /home/yuval/WebstormProjects/electric/packages/vue-composables
+[2025-04-24T04:04:22.286Z] Command line args: /home/yuval/.nvm/versions/node/v20.18.2/bin/node,/home/yuval/mcp-servers/file-scope/dist/mcp-server.js,--base-dir=./
+[2025-04-24T04:04:22.288Z] ========== CONFIG DEBUGGING ==========
+[2025-04-24T04:04:22.288Z] Loaded config: {
+  "baseDirectory": "",
+  "excludePatterns": [],
+  "fileWatching": {
+    "enabled": false,
+    "debounceMs": 300,
+    "ignoreDotFiles": true,
+    "autoRebuildTree": true,
+    "maxWatchedDirectories": 1000,
+    "watchForNewFiles": true,
+    "watchForDeleted": true,
+    "watchForChanged": true
+  },
+  "version": "1.0.0"
+}
+[2025-04-24T04:04:22.288Z] Exclude patterns count: 0
+[2025-04-24T04:04:22.289Z] =====================================
+[2025-04-24T04:04:22.289Z] Using base directory from command line: /home/yuval/WebstormProjects/electric/packages/vue-composables
+[2025-04-24T04:04:22.291Z] Global state after initialization:
+[2025-04-24T04:04:22.291Z] - Project root: /home/yuval/WebstormProjects/electric/packages/vue-composables
+[2025-04-24T04:04:22.291Z] - Config loaded: true
+[2025-04-24T04:04:22.291Z] - Exclude patterns count: 0
+[2025-04-24T04:04:22.294Z] Changed working directory to: /home/yuval/WebstormProjects/electric/packages/vue-composables
+[2025-04-24T04:04:22.295Z] 
+🌲 BUILD FILE TREE STARTED
+[2025-04-24T04:04:22.295Z] ==========================================
+[2025-04-24T04:04:22.295Z] Building file tree with config: {
+  "filename": "FileScopeMCP-tree.json",
+  "baseDirectory": "/home/yuval/WebstormProjects/electric/packages/vue-composables",
+  "projectRoot": "/home/yuval/WebstormProjects/electric/packages/vue-composables",
+  "lastUpdated": "2025-04-24T04:04:22.294Z"
+}
+[2025-04-24T04:04:22.295Z] Current working directory: /home/yuval/WebstormProjects/electric/packages/vue-composables
+[2025-04-24T04:04:22.295Z] Config in global state: ✅ YES
+[2025-04-24T04:04:22.295Z] Global config exclude patterns count: 0
+[2025-04-24T04:04:22.301Z] ✅ Using existing file tree from: FileScopeMCP-tree.json
+[2025-04-24T04:04:22.302Z] Tree root path: /home/yuval/WebstormProjects/electric/packages/vue-composables
+[2025-04-24T04:04:22.302Z] Tree has children: 11
+[2025-04-24T04:04:22.305Z] 🌲 BUILD FILE TREE COMPLETED (loaded from file)
+[2025-04-24T04:04:22.305Z] ==========================================
+
+[2025-04-24T04:04:22.305Z] File watching is disabled in config
+[2025-04-30T13:24:55.432Z] Starting FileScopeMCP server initialization
+[2025-04-30T13:24:55.435Z] Initial working directory: /home/yuval/WebstormProjects/electric/packages/vue-composables
+[2025-04-30T13:24:55.435Z] Command line args: /home/yuval/.nvm/versions/node/v20.18.2/bin/node,/home/yuval/mcp-servers/file-scope/dist/mcp-server.js,--base-dir=./
+[2025-04-30T13:24:55.436Z] ========== CONFIG DEBUGGING ==========
+[2025-04-30T13:24:55.436Z] Loaded config: {
+  "baseDirectory": "",
+  "excludePatterns": [],
+  "fileWatching": {
+    "enabled": false,
+    "debounceMs": 300,
+    "ignoreDotFiles": true,
+    "autoRebuildTree": true,
+    "maxWatchedDirectories": 1000,
+    "watchForNewFiles": true,
+    "watchForDeleted": true,
+    "watchForChanged": true
+  },
+  "version": "1.0.0"
+}
+[2025-04-30T13:24:55.436Z] Exclude patterns count: 0
+[2025-04-30T13:24:55.436Z] =====================================
+[2025-04-30T13:24:55.436Z] Using base directory from command line: /home/yuval/WebstormProjects/electric/packages/vue-composables
+[2025-04-30T13:24:55.437Z] Global state after initialization:
+[2025-04-30T13:24:55.437Z] - Project root: /home/yuval/WebstormProjects/electric/packages/vue-composables
+[2025-04-30T13:24:55.437Z] - Config loaded: true
+[2025-04-30T13:24:55.437Z] - Exclude patterns count: 0
+[2025-04-30T13:24:55.438Z] Changed working directory to: /home/yuval/WebstormProjects/electric/packages/vue-composables
+[2025-04-30T13:24:55.438Z] 
+🌲 BUILD FILE TREE STARTED
+[2025-04-30T13:24:55.438Z] ==========================================
+[2025-04-30T13:24:55.438Z] Building file tree with config: {
+  "filename": "FileScopeMCP-tree.json",
+  "baseDirectory": "/home/yuval/WebstormProjects/electric/packages/vue-composables",
+  "projectRoot": "/home/yuval/WebstormProjects/electric/packages/vue-composables",
+  "lastUpdated": "2025-04-30T13:24:55.438Z"
+}
+[2025-04-30T13:24:55.438Z] Current working directory: /home/yuval/WebstormProjects/electric/packages/vue-composables
+[2025-04-30T13:24:55.438Z] Config in global state: ✅ YES
+[2025-04-30T13:24:55.438Z] Global config exclude patterns count: 0
+[2025-04-30T13:24:55.438Z] ✅ Using existing file tree from: FileScopeMCP-tree.json
+[2025-04-30T13:24:55.439Z] Tree root path: /home/yuval/WebstormProjects/electric/packages/vue-composables
+[2025-04-30T13:24:55.439Z] Tree has children: 11
+[2025-04-30T13:24:55.439Z] 🌲 BUILD FILE TREE COMPLETED (loaded from file)
+[2025-04-30T13:24:55.439Z] ==========================================
+
+[2025-04-30T13:24:55.439Z] File watching is disabled in config
+[2025-04-30T13:39:54.454Z] Starting FileScopeMCP server initialization
+[2025-04-30T13:39:54.458Z] Initial working directory: /home/yuval/WebstormProjects/electric/packages/vue-composables
+[2025-04-30T13:39:54.458Z] Command line args: /home/yuval/.nvm/versions/node/v20.18.2/bin/node,/home/yuval/mcp-servers/file-scope/dist/mcp-server.js,--base-dir=./
+[2025-04-30T13:39:54.459Z] ========== CONFIG DEBUGGING ==========
+[2025-04-30T13:39:54.459Z] Loaded config: {
+  "baseDirectory": "",
+  "excludePatterns": [],
+  "fileWatching": {
+    "enabled": false,
+    "debounceMs": 300,
+    "ignoreDotFiles": true,
+    "autoRebuildTree": true,
+    "maxWatchedDirectories": 1000,
+    "watchForNewFiles": true,
+    "watchForDeleted": true,
+    "watchForChanged": true
+  },
+  "version": "1.0.0"
+}
+[2025-04-30T13:39:54.459Z] Exclude patterns count: 0
+[2025-04-30T13:39:54.459Z] =====================================
+[2025-04-30T13:39:54.459Z] Using base directory from command line: /home/yuval/WebstormProjects/electric/packages/vue-composables
+[2025-04-30T13:39:54.461Z] Global state after initialization:
+[2025-04-30T13:39:54.461Z] - Project root: /home/yuval/WebstormProjects/electric/packages/vue-composables
+[2025-04-30T13:39:54.461Z] - Config loaded: true
+[2025-04-30T13:39:54.461Z] - Exclude patterns count: 0
+[2025-04-30T13:39:54.461Z] Changed working directory to: /home/yuval/WebstormProjects/electric/packages/vue-composables
+[2025-04-30T13:39:54.461Z] 
+🌲 BUILD FILE TREE STARTED
+[2025-04-30T13:39:54.461Z] ==========================================
+[2025-04-30T13:39:54.461Z] Building file tree with config: {
+  "filename": "FileScopeMCP-tree.json",
+  "baseDirectory": "/home/yuval/WebstormProjects/electric/packages/vue-composables",
+  "projectRoot": "/home/yuval/WebstormProjects/electric/packages/vue-composables",
+  "lastUpdated": "2025-04-30T13:39:54.461Z"
+}
+[2025-04-30T13:39:54.461Z] Current working directory: /home/yuval/WebstormProjects/electric/packages/vue-composables
+[2025-04-30T13:39:54.461Z] Config in global state: ✅ YES
+[2025-04-30T13:39:54.461Z] Global config exclude patterns count: 0
+[2025-04-30T13:39:54.462Z] ✅ Using existing file tree from: FileScopeMCP-tree.json
+[2025-04-30T13:39:54.462Z] Tree root path: /home/yuval/WebstormProjects/electric/packages/vue-composables
+[2025-04-30T13:39:54.462Z] Tree has children: 11
+[2025-04-30T13:39:54.462Z] 🌲 BUILD FILE TREE COMPLETED (loaded from file)
+[2025-04-30T13:39:54.462Z] ==========================================
+
+[2025-04-30T13:39:54.462Z] File watching is disabled in config

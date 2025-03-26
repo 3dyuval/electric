@@ -1,0 +1,246 @@
+{
+  "config": {
+    "filename": "FileScopeMCP-tree.json",
+    "baseDirectory": "/home/yuval/WebstormProjects/electric/packages/vue-composables",
+    "projectRoot": "/home/yuval/WebstormProjects/electric/packages/vue-composables",
+    "lastUpdated": "2025-04-21T04:20:43.614Z"
+  },
+  "fileTree": {
+    "path": "/home/yuval/WebstormProjects/electric/packages/vue-composables",
+    "name": "vue-composables",
+    "isDirectory": true,
+    "children": [
+      {
+        "path": "/home/yuval/WebstormProjects/electric/packages/vue-composables/.eslintrc.cjs",
+        "name": ".eslintrc.cjs",
+        "isDirectory": false,
+        "importance": 0,
+        "dependencies": [],
+        "packageDependencies": [],
+        "dependents": []
+      },
+      {
+        "path": "/home/yuval/WebstormProjects/electric/packages/vue-composables/.prettierignore",
+        "name": ".prettierignore",
+        "isDirectory": false,
+        "importance": 0,
+        "dependencies": [],
+        "packageDependencies": [],
+        "dependents": []
+      },
+      {
+        "path": "/home/yuval/WebstormProjects/electric/packages/vue-composables/.prettierrc",
+        "name": ".prettierrc",
+        "isDirectory": false,
+        "importance": 0,
+        "dependencies": [],
+        "packageDependencies": [],
+        "dependents": []
+      },
+      {
+        "path": "/home/yuval/WebstormProjects/electric/packages/vue-composables/mcp-debug.log",
+        "name": "mcp-debug.log",
+        "isDirectory": false,
+        "importance": 0,
+        "dependencies": [],
+        "packageDependencies": [],
+        "dependents": []
+      },
+      {
+        "path": "/home/yuval/WebstormProjects/electric/packages/vue-composables/package.json",
+        "name": "package.json",
+        "isDirectory": false,
+        "importance": 3,
+        "dependencies": [],
+        "packageDependencies": [],
+        "dependents": []
+      },
+      {
+        "path": "/home/yuval/WebstormProjects/electric/packages/vue-composables/src",
+        "name": "src",
+        "isDirectory": true,
+        "children": [
+          {
+            "path": "/home/yuval/WebstormProjects/electric/packages/vue-composables/src/index.ts",
+            "name": "index.ts",
+            "isDirectory": false,
+            "importance": 7,
+            "dependencies": [],
+            "packageDependencies": [],
+            "dependents": []
+          },
+          {
+            "path": "/home/yuval/WebstormProjects/electric/packages/vue-composables/src/use-shape.ts",
+            "name": "use-shape.ts",
+            "isDirectory": false,
+            "importance": 6,
+            "dependencies": [],
+            "packageDependencies": [
+              {
+                "name": "@electric-sql/client",
+                "path": "/home/yuval/WebstormProjects/electric/packages/vue-composables/node_modules/@electric-sql/client",
+                "scope": "@electric-sql",
+                "version": "workspace:*"
+              },
+              {
+                "name": "vue",
+                "path": "/home/yuval/WebstormProjects/electric/packages/vue-composables/node_modules/vue",
+                "version": "^3.5.13"
+              }
+            ],
+            "dependents": []
+          }
+        ]
+      },
+      {
+        "path": "/home/yuval/WebstormProjects/electric/packages/vue-composables/test",
+        "name": "test",
+        "isDirectory": true,
+        "children": [
+          {
+            "path": "/home/yuval/WebstormProjects/electric/packages/vue-composables/test/support",
+            "name": "support",
+            "isDirectory": true,
+            "children": [
+              {
+                "path": "/home/yuval/WebstormProjects/electric/packages/vue-composables/test/support/global-setup.ts",
+                "name": "global-setup.ts",
+                "isDirectory": false,
+                "importance": 6,
+                "dependencies": [
+                  "/home/yuval/WebstormProjects/electric/packages/vue-composables/test/support/test-helpers.ts"
+                ],
+                "packageDependencies": [
+                  {
+                    "name": "vitest",
+                    "path": "/home/yuval/WebstormProjects/electric/packages/vue-composables/node_modules/vitest/node",
+                    "version": "^2.0.2",
+                    "isDevDependency": true
+                  }
+                ],
+                "dependents": []
+              },
+              {
+                "path": "/home/yuval/WebstormProjects/electric/packages/vue-composables/test/support/test-context.ts",
+                "name": "test-context.ts",
+                "isDirectory": false,
+                "importance": 6,
+                "dependencies": [
+                  "/home/yuval/WebstormProjects/electric/packages/vue-composables/test/support/test-helpers.ts"
+                ],
+                "packageDependencies": [
+                  {
+                    "name": "uuid",
+                    "path": "/home/yuval/WebstormProjects/electric/packages/vue-composables/node_modules/uuid",
+                    "version": "^10.0.0",
+                    "isDevDependency": true
+                  },
+                  {
+                    "name": "pg",
+                    "path": "/home/yuval/WebstormProjects/electric/packages/vue-composables/node_modules/pg",
+                    "version": "^8.12.0",
+                    "isDevDependency": true
+                  },
+                  {
+                    "name": "vitest",
+                    "path": "/home/yuval/WebstormProjects/electric/packages/vue-composables/node_modules/vitest",
+                    "version": "^2.0.2",
+                    "isDevDependency": true
+                  },
+                  {
+                    "name": "@electric-sql/client",
+                    "path": "/home/yuval/WebstormProjects/electric/packages/vue-composables/node_modules/@electric-sql/client",
+                    "scope": "@electric-sql",
+                    "version": "workspace:*"
+                  }
+                ],
+                "dependents": []
+              },
+              {
+                "path": "/home/yuval/WebstormProjects/electric/packages/vue-composables/test/support/test-helpers.ts",
+                "name": "test-helpers.ts",
+                "isDirectory": false,
+                "importance": 7,
+                "dependencies": [],
+                "packageDependencies": [
+                  {
+                    "name": "@electric-sql/client",
+                    "path": "/home/yuval/WebstormProjects/electric/packages/vue-composables/node_modules/@electric-sql/client",
+                    "scope": "@electric-sql",
+                    "version": "workspace:*"
+                  },
+                  {
+                    "name": "pg",
+                    "path": "/home/yuval/WebstormProjects/electric/packages/vue-composables/node_modules/pg",
+                    "version": "^8.12.0",
+                    "isDevDependency": true
+                  }
+                ],
+                "dependents": [
+                  "/home/yuval/WebstormProjects/electric/packages/vue-composables/test/support/global-setup.ts",
+                  "/home/yuval/WebstormProjects/electric/packages/vue-composables/test/support/test-context.ts"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/home/yuval/WebstormProjects/electric/packages/vue-composables/tsconfig.build.json",
+        "name": "tsconfig.build.json",
+        "isDirectory": false,
+        "importance": 1,
+        "dependencies": [],
+        "packageDependencies": [],
+        "dependents": []
+      },
+      {
+        "path": "/home/yuval/WebstormProjects/electric/packages/vue-composables/tsconfig.json",
+        "name": "tsconfig.json",
+        "isDirectory": false,
+        "importance": 3,
+        "dependencies": [],
+        "packageDependencies": [],
+        "dependents": []
+      },
+      {
+        "path": "/home/yuval/WebstormProjects/electric/packages/vue-composables/tsup.config.ts",
+        "name": "tsup.config.ts",
+        "isDirectory": false,
+        "importance": 4,
+        "dependencies": [],
+        "packageDependencies": [
+          {
+            "name": "tsup",
+            "path": "/home/yuval/WebstormProjects/electric/packages/vue-composables/node_modules/tsup",
+            "version": "^8.0.1",
+            "isDevDependency": true
+          },
+          {
+            "name": "tsup",
+            "path": "/home/yuval/WebstormProjects/electric/packages/vue-composables/node_modules/tsup",
+            "version": "^8.0.1",
+            "isDevDependency": true
+          }
+        ],
+        "dependents": []
+      },
+      {
+        "path": "/home/yuval/WebstormProjects/electric/packages/vue-composables/vitest.config.ts",
+        "name": "vitest.config.ts",
+        "isDirectory": false,
+        "importance": 4,
+        "dependencies": [],
+        "packageDependencies": [
+          {
+            "name": "vitest",
+            "path": "/home/yuval/WebstormProjects/electric/packages/vue-composables/node_modules/vitest/config",
+            "version": "^2.0.2",
+            "isDevDependency": true
+          }
+        ],
+        "dependents": []
+      }
+    ]
+  }
+}

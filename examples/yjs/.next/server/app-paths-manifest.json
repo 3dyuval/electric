@@ -1,0 +1,6 @@
+{
+  "/_not-found/page": "app/_not-found/page.js",
+  "/page": "app/page.js",
+  "/api/operation/route": "app/api/operation/route.js",
+  "/shape-proxy/[...table]/route": "app/shape-proxy/[...table]/route.js"
+}
