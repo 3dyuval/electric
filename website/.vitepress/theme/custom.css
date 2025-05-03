@@ -76,10 +76,22 @@
   --vp-c-indigo-1: #D0BCFF;
   --vp-c-indigo-2: #998FE7;
   --vp-c-indigo-3: #7E78DB;
+  --vp-nav-logo-height: 40px;
 
-  --vp-nav-logo-height: 30px;
+  .VPHero h1 {
+    font-weight: 500;
+    letter-spacing: -.045em;
+  }
 
-  --vp-c-text-1: rgba(255, 255, 245, 0.92);
+  .VPHero p.text {
+     background:  -webkit-linear-gradient(-90deg, #D0BCFF, #1f1d5c);
+    -webkit-background-clip: text;
+     background-clip: text;
+    -webkit-text-fill-color:transparent;
+
+  }
+
+  --vp-c-text-1: rgba(223, 255, 245, 0.92);
   --vp-c-text-2: rgba(235, 235, 245, 0.80);
   --vp-c-text-3: rgba(235, 235, 245, 0.68);
 
@@ -96,6 +108,14 @@
 
 .Layout {
   overflow-x: hidden;
+}
+
+.VPHero .container{
+  text-align: center !important;
+}
+
+  .VPHero.has-image .actions {
+  justify-content: center !important;
 }
 
 .vpi-electric-icon {

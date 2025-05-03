@@ -4,8 +4,9 @@
   const { actions, wideSectionHead } = defineProps(['actions', 'wideSectionHead'])
 </script>
 
-<style scoped>
+<style >
   .page-section {
+    min-height: 60vh;
     padding: 40px 0;
   }
   .page-section:first-child {

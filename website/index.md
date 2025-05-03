@@ -1,10 +1,10 @@
 ---
 layout: home
 hero:
-  name: 'Sync'
-  text: 'solved'
+  name: 'electric'
+  text: 'Sync your apps'
   tagline: >-
-    Sync makes apps awesome.<br />Electric solves sync.
+    Use Electric to sync apps in real time
   actions:
     - theme: brand
       text: Sign-up to Cloud
@@ -57,6 +57,8 @@ onMounted(() => {
   }
 })
 </script>
+
+
 
 <div data-template="true" class="hidden" id="works-with-sql-template">
 
