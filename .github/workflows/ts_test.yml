@@ -134,7 +134,6 @@ jobs:
       - name: build dependencies, if any
         run: pnpm -r --filter "$(jq '.name' -r package.json)^..." build
       - run: pnpm coverage
-
       - name: Upload coverage reports to CodeCov
         uses: codecov/codecov-action@ad3126e916f78f00edff4ed0317cf185271ccc2d
         with:
@@ -149,6 +148,9 @@ jobs:
           fail_ci_if_error: true
           flags: typescript,unit-tests,${{ matrix.package_dir }}
           files: ./junit/test-report.junit.xml
+          # Upload all PR test results to single branch - requires overriding branch and commit
+          override_branch: ${{ github.event_name == 'pull_request' && 'codecov/pr-test-aggregation' || '' }}
+          override_commit: ${{ github.event_name == 'pull_request' && env.DUMMY_COMMIT_SHA || '' }}
 
   check_and_build_examples:
     name: Check and build ${{ matrix.example_folder }}
