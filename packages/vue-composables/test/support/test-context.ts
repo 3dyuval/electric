@@ -2,7 +2,7 @@
 import { v4 as uuidv4 } from 'uuid'
 import { Client, QueryResult } from 'pg'
 import { inject, test } from 'vitest'
-import { makePgClient, createParallelWaiterStream } from './test-helpers'
+import { makePgClient } from './test-helpers'
 import { FetchError } from '@electric-sql/client'
 
 export type IssueRow = { id: string; title: string }
@@ -19,7 +19,6 @@ export const testWithDbClient = test.extend<{
   baseUrl: string
   pgSchema: string
   clearShape: ClearShapeFn
-  parallelWaiterStream: ReturnType<typeof createParallelWaiterStream>
 }>({
   dbClient: async ({}, use) => {
     const searchOption = `-csearch_path=${inject(`testPgSchema`)}`
@@ -56,9 +55,6 @@ export const testWithDbClient = test.extend<{
         throw new Error(`Could not delete shape ${table} with handle ${handle}`)
       }
     })
-  },
-  parallelWaiterStream: async ({}, use) => {
-    await use(createParallelWaiterStream())
   },
 })
 
