@@ -23,12 +23,12 @@ interface TestRow {
   [key: string]: unknown
 }
 
-describe('useShape types', () => {
-  it('should return the correct types', () => {
+describe(`useShape types`, () => {
+  it(`should return the correct types`, () => {
     const result = useShape<TestRow>({
-      url: 'https://example.com',
+      url: `https://example.com`,
       params: {
-        table: 'test-table',
+        table: `test-table`,
       },
     })
 
@@ -41,11 +41,11 @@ describe('useShape types', () => {
     expectTypeOf(result.isError).toMatchTypeOf<boolean>()
   })
 
-  it('should infer types from shape options', () => {
+  it(`should infer types from shape options`, () => {
     const options = {
-      url: 'https://example.com',
+      url: `https://example.com`,
       params: {
-        table: 'test-table',
+        table: `test-table`,
       },
     }
 
@@ -55,11 +55,11 @@ describe('useShape types', () => {
     expectTypeOf(result.shape).toMatchTypeOf<Shape<any>>()
   })
 
-  it('should accept custom fetchClient', () => {
+  it(`should accept custom fetchClient`, () => {
     const result = useShape<TestRow>({
-      url: 'https://example.com',
+      url: `https://example.com`,
       params: {
-        table: 'test-table',
+        table: `test-table`,
       },
       fetchClient: (input, init) => {
         return fetch(input, init)
@@ -69,20 +69,20 @@ describe('useShape types', () => {
     expectTypeOf(result.data).toMatchTypeOf<TestRow[]>()
   })
 
-  it('should allow controlling subscription', () => {
+  it(`should allow controlling subscription`, () => {
     // With subscription enabled (default)
     const result1 = useShape<TestRow>({
-      url: 'https://example.com',
+      url: `https://example.com`,
       params: {
-        table: 'test-table',
+        table: `test-table`,
       },
     })
 
     // With subscription disabled
     const result2 = useShape<TestRow>({
-      url: 'https://example.com',
+      url: `https://example.com`,
       params: {
-        table: 'test-table',
+        table: `test-table`,
       },
       subscribe: false,
     })
