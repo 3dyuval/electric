@@ -143,6 +143,8 @@ jobs:
       - name: Upload test results to CodeCov
         uses: codecov/test-results-action@f2dba722c67b86c6caa034178c6e4d35335f6706
         if: ${{ !cancelled() }}
+        env:
+          DUMMY_COMMIT_SHA: ${{ github.event.pull_request.head.sha || github.sha }}-dummy
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           fail_ci_if_error: true
