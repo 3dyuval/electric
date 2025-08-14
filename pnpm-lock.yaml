@@ -55,6 +55,16 @@ importers:
 
   examples/bash: {}
 
+  examples/burn:
+    dependencies:
+      camelcase:
+        specifier: ^8.0.0
+        version: 8.0.0
+    devDependencies:
+      sst:
+        specifier: 3.6.35
+        version: 3.6.35
+
   examples/encryption:
     dependencies:
       "@electric-sql/react":
@@ -26237,10 +26247,6 @@ snapshots:
     dependencies:
       graceful-fs: 4.2.11
       p-event: 6.0.1
-
-  core-js-compat@3.39.0:
-    dependencies:
-      browserslist: 4.24.2
 
   core-js-compat@3.44.0:
     dependencies:
