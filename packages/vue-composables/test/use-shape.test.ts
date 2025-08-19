@@ -14,6 +14,7 @@ async function waitFor(
   options = { timeout: 1000 }
 ) {
   const start = Date.now()
+  // eslint-disable-next-line no-constant-condition
   while (true) {
     try {
       const result = callback()
@@ -308,9 +309,9 @@ describe(`useShape`, () => {
     aborter,
     insertIssues,
     issuesTableUrl,
-    parallelWaiterStream,
+    _parallelWaiterStream,
   }) => {
-    const [id] = await insertIssues({ title: `test row` })
+    const [_id] = await insertIssues({ title: `test row` })
 
     const TestComponent = defineComponent({
       setup() {
@@ -323,7 +324,7 @@ describe(`useShape`, () => {
           subscribe: true,
         })
         // Create a local snapshot to test against after unmount
-        let snapshot: any[] = []
+        let snapshot: unknown[] = []
         const updateSnapshot = () => {
           snapshot = [...result.data]
         }

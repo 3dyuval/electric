@@ -5,7 +5,7 @@ import {
   ShapeStream,
   ShapeStreamOptions,
 } from '@electric-sql/client'
-import { onUnmounted, Ref, ref, toRef, watch } from 'vue'
+import { onUnmounted, Ref, ref } from 'vue'
 
 type UnknownShape = Shape<Row<unknown>>
 type UnknownShapeStream = ShapeStream<Row<unknown>>

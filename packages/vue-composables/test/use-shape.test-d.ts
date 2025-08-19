@@ -9,9 +9,9 @@ interface Shape<T> {
   lastSyncedAt(): number | undefined
 }
 
-interface ShapeStream<T> {
-  options: any
-  subscribe(callback: any): () => void
+interface ShapeStream<_T> {
+  options: unknown
+  subscribe(callback: unknown): () => void
   isLoading(): boolean
   lastSyncedAt(): number | undefined
   isConnected(): boolean
@@ -50,9 +50,9 @@ describe(`useShape types`, () => {
     }
 
     const result = useShape(options)
-    // Should default to any type if not specified
-    expectTypeOf(result.data).toMatchTypeOf<any[]>()
-    expectTypeOf(result.shape).toMatchTypeOf<Shape<any>>()
+    // Should default to unknown type if not specified
+    expectTypeOf(result.data).toMatchTypeOf<unknown[]>()
+    expectTypeOf(result.shape).toMatchTypeOf<Shape<unknown>>()
   })
 
   it(`should accept custom fetchClient`, () => {

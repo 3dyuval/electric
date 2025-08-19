@@ -46,6 +46,9 @@ importers:
       pg:
         specifier: ^8.13.1
         version: 8.13.1
+      playwright:
+        specifier: ^1.52.0
+        version: 1.52.0
       sst:
         specifier: 3.6.25
         version: 3.6.25
@@ -560,6 +563,9 @@ importers:
       fs-extra:
         specifier: ^10.0.0
         version: 10.1.0
+      playwright:
+        specifier: ^1.52.0
+        version: 1.52.0
       postcss:
         specifier: ^8.4.39
         version: 8.4.47
@@ -586,7 +592,7 @@ importers:
         version: link:../../packages/react-hooks
       next:
         specifier: ^14.2.5
-        version: 14.2.17(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        version: 14.2.17(@playwright/test@1.52.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       pg:
         specifier: ^8.12.0
         version: 8.13.1
@@ -627,6 +633,9 @@ importers:
       eslint:
         specifier: ^8.57.0
         version: 8.57.1
+      playwright:
+        specifier: ^1.52.0
+        version: 1.52.0
       sst:
         specifier: 3.6.35
         version: 3.6.35
@@ -636,6 +645,28 @@ importers:
       vite:
         specifier: ^5.3.4
         version: 5.4.10(@types/node@20.17.6)(lightningcss@1.30.1)(terser@5.36.0)
+
+  examples/phoenix-liveview:
+    dependencies:
+      camelcase:
+        specifier: ^8.0.0
+        version: 8.0.0
+    devDependencies:
+      '@databases/pg-migrations':
+        specifier: ^5.0.3
+        version: 5.0.3(typescript@5.7.2)
+      '@playwright/test':
+        specifier: ^1.52.0
+        version: 1.52.0
+      playwright:
+        specifier: ^1.52.0
+        version: 1.52.0
+      sst:
+        specifier: 3.6.35
+        version: 3.6.35
+      typescript:
+        specifier: 5.7.2
+        version: 5.7.2
 
   examples/proxy-auth:
     dependencies:
@@ -647,7 +678,7 @@ importers:
         version: link:../../packages/react-hooks
       next:
         specifier: ^14.2.5
-        version: 14.2.17(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        version: 14.2.17(@playwright/test@1.52.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       pg:
         specifier: ^8.12.0
         version: 8.13.1
@@ -715,6 +746,9 @@ importers:
       react-dom:
         specifier: ^18.3.1
         version: 18.3.1(react@18.3.1)
+      sst:
+        specifier: 3.6.35
+        version: 3.6.35
     devDependencies:
       "@databases/pg-migrations":
         specifier: ^5.0.3
@@ -829,6 +863,9 @@ importers:
       react-dom:
         specifier: ^18.3.1
         version: 18.3.1(react@18.3.1)
+      sst:
+        specifier: 3.6.35
+        version: 3.6.35
       uuid:
         specifier: ^10.0.0
         version: 10.0.0
@@ -857,6 +894,9 @@ importers:
       eslint:
         specifier: ^8.57.0
         version: 8.57.1
+      playwright:
+        specifier: ^1.52.0
+        version: 1.52.0
       typescript:
         specifier: ^5.5.3
         version: 5.6.3
@@ -918,6 +958,12 @@ importers:
       eslint:
         specifier: ^8.57.0
         version: 8.57.1
+      playwright:
+        specifier: ^1.52.0
+        version: 1.52.0
+      sst:
+        specifier: 3.6.35
+        version: 3.6.35
       typescript:
         specifier: ^5.5.3
         version: 5.6.3
@@ -953,10 +999,10 @@ importers:
         version: 4.1.0
       drizzle-orm:
         specifier: ^0.44.3
-        version: 0.44.3(@electric-sql/pglite@0.2.17)(@types/pg@8.15.4)(kysely@0.28.3)(pg@8.16.3)(postgres@3.4.7)
+        version: 0.44.3(@electric-sql/pglite@0.2.17)(@neondatabase/serverless@0.10.4)(@types/pg@8.15.4)(kysely@0.28.3)(pg@8.16.3)(postgres@3.4.7)
       drizzle-zod:
         specifier: ^0.8.2
-        version: 0.8.2(drizzle-orm@0.44.3(@electric-sql/pglite@0.2.17)(@types/pg@8.15.4)(kysely@0.28.3)(pg@8.16.3)(postgres@3.4.7))(zod@4.0.10)
+        version: 0.8.2(drizzle-orm@0.44.3(@electric-sql/pglite@0.2.17)(@neondatabase/serverless@0.10.4)(@types/pg@8.15.4)(kysely@0.28.3)(pg@8.16.3)(postgres@3.4.7))(zod@4.0.10)
       expo:
         specifier: 53.0.20
         version: 53.0.20(@babel/core@7.28.0)(@expo/metro-runtime@5.0.4(react-native@0.80.1(@babel/core@7.28.0)(@types/react@19.1.8)(react@19.1.0)))(react-native@0.80.1(@babel/core@7.28.0)(@types/react@19.1.8)(react@19.1.0))(react@19.1.0)
@@ -1047,7 +1093,7 @@ importers:
         version: 1.130.2(@tanstack/react-query@5.59.20(react@19.1.1))(@tanstack/react-router@1.130.2(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(@tanstack/router-core@1.130.2)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
       '@tanstack/react-start':
         specifier: ^1.130.3
-        version: 1.130.3(@electric-sql/pglite@0.2.17)(@netlify/blobs@9.1.2)(@tanstack/react-router@1.130.2(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(@vitejs/plugin-react@4.7.0(vite@6.3.5(@types/node@20.17.6)(jiti@2.5.1)(lightningcss@1.30.1)(terser@5.36.0)(tsx@4.20.3)(yaml@2.6.0)))(aws4fetch@1.0.20)(drizzle-orm@0.44.3(@electric-sql/pglite@0.2.17)(@types/pg@8.15.4)(kysely@0.28.3)(pg@8.16.3)(postgres@3.4.7))(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(vite@6.3.5(@types/node@20.17.6)(jiti@2.5.1)(lightningcss@1.30.1)(terser@5.36.0)(tsx@4.20.3)(yaml@2.6.0))
+        version: 1.130.3(@electric-sql/pglite@0.2.17)(@netlify/blobs@9.1.2)(@tanstack/react-router@1.130.2(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(@vitejs/plugin-react@4.7.0(vite@6.3.5(@types/node@20.17.6)(jiti@2.5.1)(lightningcss@1.30.1)(terser@5.36.0)(tsx@4.20.3)(yaml@2.6.0)))(aws4fetch@1.0.20)(drizzle-orm@0.44.3(@electric-sql/pglite@0.2.17)(@neondatabase/serverless@0.10.4)(@types/pg@8.15.4)(kysely@0.28.3)(pg@8.16.3)(postgres@3.4.7))(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(vite@6.3.5(@types/node@20.17.6)(jiti@2.5.1)(lightningcss@1.30.1)(terser@5.36.0)(tsx@4.20.3)(yaml@2.6.0))
       '@tanstack/router-plugin':
         specifier: ^1.130.2
         version: 1.130.2(@tanstack/react-router@1.130.2(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(vite@6.3.5(@types/node@20.17.6)(jiti@2.5.1)(lightningcss@1.30.1)(terser@5.36.0)(tsx@4.20.3)(yaml@2.6.0))
@@ -1065,10 +1111,10 @@ importers:
         version: 17.2.1
       drizzle-orm:
         specifier: ^0.44.3
-        version: 0.44.3(@electric-sql/pglite@0.2.17)(@types/pg@8.15.4)(kysely@0.28.3)(pg@8.16.3)(postgres@3.4.7)
+        version: 0.44.3(@electric-sql/pglite@0.2.17)(@neondatabase/serverless@0.10.4)(@types/pg@8.15.4)(kysely@0.28.3)(pg@8.16.3)(postgres@3.4.7)
       drizzle-zod:
         specifier: ^0.7.1
-        version: 0.7.1(drizzle-orm@0.44.3(@electric-sql/pglite@0.2.17)(@types/pg@8.15.4)(kysely@0.28.3)(pg@8.16.3)(postgres@3.4.7))(zod@3.25.76)
+        version: 0.7.1(drizzle-orm@0.44.3(@electric-sql/pglite@0.2.17)(@neondatabase/serverless@0.10.4)(@types/pg@8.15.4)(kysely@0.28.3)(pg@8.16.3)(postgres@3.4.7))(zod@3.25.76)
       pg:
         specifier: ^8.16.3
         version: 8.16.3
@@ -1391,12 +1437,12 @@ importers:
       codemirror:
         specifier: ^6.0.1
         version: 6.0.1(@lezer/common@1.2.3)
+      hono:
+        specifier: ^4.6.13
+        version: 4.6.13
       lib0:
         specifier: ^0.2.96
         version: 0.2.99
-      next:
-        specifier: ^14.2.9
-        version: 14.2.17(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       pg:
         specifier: ^8.13.1
         version: 8.13.1
@@ -1407,20 +1453,20 @@ importers:
         specifier: ^18.3.1
         version: 18.3.1(react@18.3.1)
       sst:
-        specifier: 3.6.35
+        specifier: ^3.6.35
         version: 3.6.35
       y-codemirror.next:
         specifier: 0.3.5
-        version: 0.3.5(@codemirror/state@6.5.0)(@codemirror/view@6.35.2)(yjs@13.6.20)
+        version: 0.3.5(@codemirror/state@6.5.0)(@codemirror/view@6.35.2)(yjs@13.6.26)
       y-indexeddb:
         specifier: ^9.0.12
-        version: 9.0.12(yjs@13.6.20)
+        version: 9.0.12(yjs@13.6.26)
       y-protocols:
         specifier: 1.0.6
-        version: 1.0.6(yjs@13.6.20)
+        version: 1.0.6(yjs@13.6.26)
       yjs:
-        specifier: ^13.6.18
-        version: 13.6.20
+        specifier: ^13.6.24
+        version: 13.6.26
     devDependencies:
       "@databases/pg-migrations":
         specifier: ^5.0.3
@@ -1446,6 +1492,9 @@ importers:
       eslint:
         specifier: ^8.57.0
         version: 8.57.1
+      tsx:
+        specifier: ^4.7.1
+        version: 4.20.3
       typescript:
         specifier: ^5.5.3
         version: 5.6.3
@@ -1656,14 +1705,14 @@ importers:
         specifier: ^3.0.0
         version: 3.2.4(@types/debug@4.1.12)(@types/node@20.17.6)(jsdom@26.1.0)(lightningcss@1.30.1)(terser@5.36.0)
 
-  packages/vue-useshape:
+  packages/vue-composables:
     dependencies:
       "@electric-sql/client":
         specifier: workspace:*
         version: link:../typescript-client
       vue:
         specifier: ^3.5.13
-        version: 3.5.13(typescript@5.6.3)
+        version: 3.5.13(typescript@5.8.3)
     devDependencies:
       "@types/pg":
         specifier: ^8.11.6
@@ -1694,7 +1743,7 @@ importers:
         version: 9.1.0(eslint@8.57.1)
       eslint-plugin-prettier:
         specifier: ^5.1.3
-        version: 5.2.1(eslint-config-prettier@9.1.0(eslint@8.57.1))(eslint@8.57.1)(prettier@3.3.3)
+        version: 5.5.3(eslint-config-prettier@9.1.0(eslint@8.57.1))(eslint@8.57.1)(prettier@3.6.2)
       glob:
         specifier: ^10.3.10
         version: 10.4.5
@@ -1703,10 +1752,10 @@ importers:
         version: 25.0.1
       pg:
         specifier: ^8.12.0
-        version: 8.13.1
+        version: 8.16.3
       prettier:
         specifier: ^3.3.2
-        version: 3.3.3
+        version: 3.6.2
       shx:
         specifier: ^0.3.4
         version: 0.3.4
@@ -1715,7 +1764,7 @@ importers:
         version: 8.3.5(@swc/core@1.9.1(@swc/helpers@0.5.5))(jiti@1.21.6)(postcss@8.5.3)(tsx@4.19.2)(typescript@5.6.3)(yaml@2.6.0)
       typescript:
         specifier: ^5.5.2
-        version: 5.6.3
+        version: 5.8.3
       uuid:
         specifier: ^10.0.0
         version: 10.0.0
@@ -1724,6 +1773,10 @@ importers:
         version: 2.1.4(@types/node@20.17.6)(jsdom@25.0.1)(terser@5.36.0)
 
   website:
+    dependencies:
+      posthog-js:
+        specifier: ^1.236.4
+        version: 1.236.4
     devDependencies:
       "@redocly/cli":
         specifier: ^1.18.0
@@ -6198,6 +6251,9 @@ packages:
 
   '@microsoft/fetch-event-source@2.0.1':
     resolution: {integrity: sha512-W6CLUJ2eBMw3Rec70qrsEW0jOm/3twwJv21mrmj2yORiaVmVYGS4sSS5yUwvQc1ZlDLYGPnClVWmUUMagKNsfA==}
+
+  '@neondatabase/serverless@0.10.4':
+    resolution: {integrity: sha512-2nZuh3VUO9voBauuh+IGYRhGU/MskWHt1IuZvHcJw6GLjDgtqj/KViKo7SIrLdGLdot7vFbiRRw+BgEy3wT9HA==}
 
   '@netlify/binary-info@1.0.0':
     resolution: {integrity: sha512-4wMPu9iN3/HL97QblBsBay3E1etIciR84izI3U+4iALY+JHCrI+a2jO0qbAZ/nxKoegypYEaiiqWXylm+/zfrw==}
@@ -25083,7 +25139,7 @@ snapshots:
       estree-walker: 3.0.3
       magic-string: 0.30.12
     optionalDependencies:
-      vite: 5.4.10(@types/node@18.19.99)(lightningcss@1.30.1)(terser@5.36.0)
+      vite: 5.4.10(@types/node@18.19.123)(lightningcss@1.30.1)(terser@5.36.0)
 
   '@vitest/mocker@2.1.4(vite@5.4.10(@types/node@20.17.6)(lightningcss@1.30.1)(terser@5.36.0))':
     dependencies:
@@ -25152,7 +25208,7 @@ snapshots:
       loupe: 3.1.4
       tinyrainbow: 2.0.0
 
-  '@vue/compiler-core@3.5.12':
+  '@vue/compiler-core@3.5.13':
     dependencies:
       "@babel/parser": 7.26.2
       "@vue/shared": 3.5.13
@@ -25867,6 +25923,11 @@ snapshots:
 
   cache-control-parser@2.0.6: {}
 
+  call-bind-apply-helpers@1.0.2:
+    dependencies:
+      es-errors: 1.3.0
+      function-bind: 1.1.2
+
   call-bind@1.0.7:
     dependencies:
       es-define-property: 1.0.0
@@ -26397,10 +26458,10 @@ snapshots:
 
   dayjs@1.11.13: {}
 
-  db0@0.3.2(@electric-sql/pglite@0.2.17)(drizzle-orm@0.44.3(@electric-sql/pglite@0.2.17)(@types/pg@8.15.4)(kysely@0.28.3)(pg@8.16.3)(postgres@3.4.7)):
+  db0@0.3.2(@electric-sql/pglite@0.2.17)(drizzle-orm@0.44.3(@electric-sql/pglite@0.2.17)(@neondatabase/serverless@0.10.4)(@types/pg@8.15.4)(kysely@0.28.3)(pg@8.16.3)(postgres@3.4.7)):
     optionalDependencies:
       '@electric-sql/pglite': 0.2.17
-      drizzle-orm: 0.44.3(@electric-sql/pglite@0.2.17)(@types/pg@8.15.4)(kysely@0.28.3)(pg@8.16.3)(postgres@3.4.7)
+      drizzle-orm: 0.44.3(@electric-sql/pglite@0.2.17)(@neondatabase/serverless@0.10.4)(@types/pg@8.15.4)(kysely@0.28.3)(pg@8.16.3)(postgres@3.4.7)
 
   debug@2.6.9:
     dependencies:
@@ -26661,7 +26722,7 @@ snapshots:
       "@one-ini/wasm": 0.1.1
       commander: 10.0.1
       minimatch: 9.0.1
-      semver: 7.6.3
+      semver: 7.7.2
 
   ee-first@1.1.1: {}
 
@@ -26813,13 +26874,15 @@ snapshots:
     dependencies:
       get-intrinsic: 1.2.4
 
+  es-define-property@1.0.1: {}
+
   es-errors@1.3.0: {}
 
   es-get-iterator@1.1.3:
     dependencies:
       call-bind: 1.0.7
-      get-intrinsic: 1.3.0
-      has-symbols: 1.1.0
+      get-intrinsic: 1.2.4
+      has-symbols: 1.0.3
       is-arguments: 1.1.1
       is-map: 2.0.3
       is-set: 2.0.3
@@ -27212,6 +27275,15 @@ snapshots:
       synckit: 0.11.11
     optionalDependencies:
       eslint-config-prettier: 10.1.8(eslint@9.32.0(jiti@2.5.1))
+
+  eslint-plugin-prettier@5.5.3(eslint-config-prettier@9.1.0(eslint@8.57.1))(eslint@8.57.1)(prettier@3.6.2):
+    dependencies:
+      eslint: 8.57.1
+      prettier: 3.6.2
+      prettier-linter-helpers: 1.0.0
+      synckit: 0.11.11
+    optionalDependencies:
+      eslint-config-prettier: 9.1.0(eslint@8.57.1)
 
   eslint-plugin-react-compiler@19.0.0-beta-37ed2a7-20241206(eslint@8.57.1):
     dependencies:
@@ -27888,6 +27960,8 @@ snapshots:
       node-domexception: 1.0.0
       web-streams-polyfill: 3.3.3
 
+  fflate@0.4.8: {}
+
   file-entry-cache@6.0.1:
     dependencies:
       flat-cache: 3.2.0
@@ -28062,6 +28136,9 @@ snapshots:
 
   fs.realpath@1.0.0: {}
 
+  fsevents@2.3.2:
+    optional: true
+
   fsevents@2.3.3:
     optional: true
 
@@ -28110,6 +28187,19 @@ snapshots:
       has-symbols: 1.0.3
       hasown: 2.0.2
 
+  get-intrinsic@1.3.0:
+    dependencies:
+      call-bind-apply-helpers: 1.0.2
+      es-define-property: 1.0.1
+      es-errors: 1.3.0
+      es-object-atoms: 1.1.1
+      function-bind: 1.1.2
+      get-proto: 1.0.1
+      gopd: 1.2.0
+      has-symbols: 1.1.0
+      hasown: 2.0.2
+      math-intrinsics: 1.1.0
+
   get-nonce@1.0.1: {}
 
   get-own-enumerable-property-symbols@3.0.2: {}
@@ -28152,14 +28242,6 @@ snapshots:
   glob-parent@6.0.2:
     dependencies:
       is-glob: 4.0.3
-
-  glob@10.3.10:
-    dependencies:
-      foreground-child: 3.3.0
-      jackspeak: 2.3.6
-      minimatch: 9.0.5
-      minipass: 7.1.2
-      path-scurry: 1.11.1
 
   glob@10.4.5:
     dependencies:
@@ -28227,6 +28309,8 @@ snapshots:
   gopd@1.0.1:
     dependencies:
       get-intrinsic: 1.2.4
+
+  gopd@1.2.0: {}
 
   graceful-fs@4.2.11: {}
 
@@ -28297,9 +28381,11 @@ snapshots:
 
   has-symbols@1.0.3: {}
 
+  has-symbols@1.1.0: {}
+
   has-tostringtag@1.0.2:
     dependencies:
-      has-symbols: 1.1.0
+      has-symbols: 1.0.3
 
   has@1.0.4: {}
 
@@ -28389,6 +28475,8 @@ snapshots:
   html-encoding-sniffer@4.0.0:
     dependencies:
       whatwg-encoding: 3.1.1
+
+  html-escaper@2.0.2: {}
 
   html-void-elements@3.0.0: {}
 
@@ -28511,7 +28599,7 @@ snapshots:
     dependencies:
       es-errors: 1.3.0
       hasown: 2.0.2
-      side-channel: 1.1.0
+      side-channel: 1.0.6
 
   internal-slot@1.1.0:
     dependencies:
@@ -28562,7 +28650,7 @@ snapshots:
   is-array-buffer@3.0.4:
     dependencies:
       call-bind: 1.0.7
-      get-intrinsic: 1.3.0
+      get-intrinsic: 1.2.4
 
   is-array-buffer@3.0.5:
     dependencies:
@@ -28769,7 +28857,7 @@ snapshots:
 
   is-symbol@1.0.4:
     dependencies:
-      has-symbols: 1.1.0
+      has-symbols: 1.0.3
 
   is-symbol@1.1.1:
     dependencies:
@@ -28796,7 +28884,7 @@ snapshots:
   is-weakset@2.0.3:
     dependencies:
       call-bind: 1.0.7
-      get-intrinsic: 1.3.0
+      get-intrinsic: 1.2.4
 
   is-what@4.1.16: {}
 
@@ -30217,7 +30305,7 @@ snapshots:
       - "@babel/core"
       - babel-plugin-macros
 
-  nitropack@2.12.4(@electric-sql/pglite@0.2.17)(@netlify/blobs@9.1.2)(aws4fetch@1.0.20)(drizzle-orm@0.44.3(@electric-sql/pglite@0.2.17)(@types/pg@8.15.4)(kysely@0.28.3)(pg@8.16.3)(postgres@3.4.7)):
+  nitropack@2.12.4(@electric-sql/pglite@0.2.17)(@netlify/blobs@9.1.2)(aws4fetch@1.0.20)(drizzle-orm@0.44.3(@electric-sql/pglite@0.2.17)(@neondatabase/serverless@0.10.4)(@types/pg@8.15.4)(kysely@0.28.3)(pg@8.16.3)(postgres@3.4.7)):
     dependencies:
       '@cloudflare/kv-asset-handler': 0.4.0
       '@netlify/functions': 3.1.10(rollup@4.46.1)
@@ -30239,7 +30327,7 @@ snapshots:
       cookie-es: 2.0.0
       croner: 9.1.0
       crossws: 0.3.5
-      db0: 0.3.2(@electric-sql/pglite@0.2.17)(drizzle-orm@0.44.3(@electric-sql/pglite@0.2.17)(@types/pg@8.15.4)(kysely@0.28.3)(pg@8.16.3)(postgres@3.4.7))
+      db0: 0.3.2(@electric-sql/pglite@0.2.17)(drizzle-orm@0.44.3(@electric-sql/pglite@0.2.17)(@neondatabase/serverless@0.10.4)(@types/pg@8.15.4)(kysely@0.28.3)(pg@8.16.3)(postgres@3.4.7))
       defu: 6.1.4
       destr: 2.0.5
       dot-prop: 9.0.0
@@ -30285,7 +30373,7 @@ snapshots:
       unenv: 2.0.0-rc.19
       unimport: 5.2.0
       unplugin-utils: 0.2.4
-      unstorage: 1.16.1(@netlify/blobs@9.1.2)(aws4fetch@1.0.20)(db0@0.3.2(@electric-sql/pglite@0.2.17)(drizzle-orm@0.44.3(@electric-sql/pglite@0.2.17)(@types/pg@8.15.4)(kysely@0.28.3)(pg@8.16.3)(postgres@3.4.7)))(ioredis@5.6.1)
+      unstorage: 1.16.1(@netlify/blobs@9.1.2)(aws4fetch@1.0.20)(db0@0.3.2(@electric-sql/pglite@0.2.17)(drizzle-orm@0.44.3(@electric-sql/pglite@0.2.17)(@neondatabase/serverless@0.10.4)(@types/pg@8.15.4)(kysely@0.28.3)(pg@8.16.3)(postgres@3.4.7)))(ioredis@5.6.1)
       untyped: 2.0.0
       unwasm: 0.3.9
       youch: 4.1.0-beta.8
@@ -30498,6 +30586,8 @@ snapshots:
 
   object-inspect@1.13.2: {}
 
+  object-inspect@1.13.4: {}
+
   object-is@1.1.6:
     dependencies:
       call-bind: 1.0.7
@@ -30509,7 +30599,7 @@ snapshots:
     dependencies:
       call-bind: 1.0.7
       define-properties: 1.2.1
-      has-symbols: 1.1.0
+      has-symbols: 1.0.3
       object-keys: 1.1.1
 
   object.assign@4.1.7:
@@ -30526,7 +30616,7 @@ snapshots:
       call-bind: 1.0.8
       call-bound: 1.0.4
       define-properties: 1.2.1
-      es-object-atoms: 1.0.0
+      es-object-atoms: 1.1.1
 
   object.fromentries@2.0.8:
     dependencies:
@@ -32293,12 +32383,40 @@ snapshots:
       minimist: 1.2.8
       shelljs: 0.8.5
 
+  side-channel-list@1.0.0:
+    dependencies:
+      es-errors: 1.3.0
+      object-inspect: 1.13.4
+
+  side-channel-map@1.0.1:
+    dependencies:
+      call-bound: 1.0.4
+      es-errors: 1.3.0
+      get-intrinsic: 1.3.0
+      object-inspect: 1.13.4
+
+  side-channel-weakmap@1.0.2:
+    dependencies:
+      call-bound: 1.0.4
+      es-errors: 1.3.0
+      get-intrinsic: 1.3.0
+      object-inspect: 1.13.4
+      side-channel-map: 1.0.1
+
   side-channel@1.0.6:
     dependencies:
       call-bind: 1.0.7
       es-errors: 1.3.0
       get-intrinsic: 1.2.4
       object-inspect: 1.13.2
+
+  side-channel@1.1.0:
+    dependencies:
+      es-errors: 1.3.0
+      object-inspect: 1.13.4
+      side-channel-list: 1.0.0
+      side-channel-map: 1.0.1
+      side-channel-weakmap: 1.0.2
 
   siginfo@2.0.0: {}
 
@@ -32547,7 +32665,7 @@ snapshots:
       internal-slot: 1.0.7
       regexp.prototype.flags: 1.5.3
       set-function-name: 2.0.2
-      side-channel: 1.0.6
+      side-channel: 1.1.0
 
   string.prototype.repeat@1.0.0:
     dependencies:
@@ -32958,6 +33076,10 @@ snapshots:
     dependencies:
       typescript: 5.6.3
 
+  ts-api-utils@1.4.0(typescript@5.8.3):
+    dependencies:
+      typescript: 5.8.3
+
   ts-api-utils@2.1.0(typescript@5.6.3):
     dependencies:
       typescript: 5.6.3
@@ -33015,6 +33137,34 @@ snapshots:
       "@swc/core": 1.9.1(@swc/helpers@0.5.5)
       postcss: 8.5.3
       typescript: 5.6.3
+    transitivePeerDependencies:
+      - jiti
+      - supports-color
+      - tsx
+      - yaml
+
+  tsup@8.3.5(@swc/core@1.9.1(@swc/helpers@0.5.5))(jiti@2.5.1)(postcss@8.5.6)(tsx@4.20.3)(typescript@5.8.3)(yaml@2.6.0):
+    dependencies:
+      bundle-require: 5.0.0(esbuild@0.24.0)
+      cac: 6.7.14
+      chokidar: 4.0.1
+      consola: 3.2.3
+      debug: 4.3.7(supports-color@5.5.0)
+      esbuild: 0.24.0
+      joycon: 3.1.1
+      picocolors: 1.1.1
+      postcss-load-config: 6.0.1(jiti@2.5.1)(postcss@8.5.6)(tsx@4.20.3)(yaml@2.6.0)
+      resolve-from: 5.0.0
+      rollup: 4.24.4
+      source-map: 0.8.0-beta.0
+      sucrase: 3.35.0
+      tinyexec: 0.3.1
+      tinyglobby: 0.2.10
+      tree-kill: 1.2.2
+    optionalDependencies:
+      '@swc/core': 1.9.1(@swc/helpers@0.5.5)
+      postcss: 8.5.6
+      typescript: 5.8.3
     transitivePeerDependencies:
       - jiti
       - supports-color
@@ -33135,6 +33285,8 @@ snapshots:
       unplugin: 2.3.5
 
   undefsafe@2.0.5: {}
+
+  undici-types@5.26.5: {}
 
   undici-types@6.19.8: {}
 
@@ -33293,7 +33445,7 @@ snapshots:
       picomatch: 4.0.3
       webpack-virtual-modules: 0.6.2
 
-  unstorage@1.16.1(@netlify/blobs@9.1.2)(aws4fetch@1.0.20)(db0@0.3.2(@electric-sql/pglite@0.2.17)(drizzle-orm@0.44.3(@electric-sql/pglite@0.2.17)(@types/pg@8.15.4)(kysely@0.28.3)(pg@8.16.3)(postgres@3.4.7)))(ioredis@5.6.1):
+  unstorage@1.16.1(@netlify/blobs@9.1.2)(aws4fetch@1.0.20)(db0@0.3.2(@electric-sql/pglite@0.2.17)(drizzle-orm@0.44.3(@electric-sql/pglite@0.2.17)(@neondatabase/serverless@0.10.4)(@types/pg@8.15.4)(kysely@0.28.3)(pg@8.16.3)(postgres@3.4.7)))(ioredis@5.6.1):
     dependencies:
       anymatch: 3.1.3
       chokidar: 4.0.3
@@ -33306,7 +33458,7 @@ snapshots:
     optionalDependencies:
       '@netlify/blobs': 9.1.2
       aws4fetch: 1.0.20
-      db0: 0.3.2(@electric-sql/pglite@0.2.17)(drizzle-orm@0.44.3(@electric-sql/pglite@0.2.17)(@types/pg@8.15.4)(kysely@0.28.3)(pg@8.16.3)(postgres@3.4.7))
+      db0: 0.3.2(@electric-sql/pglite@0.2.17)(drizzle-orm@0.44.3(@electric-sql/pglite@0.2.17)(@neondatabase/serverless@0.10.4)(@types/pg@8.15.4)(kysely@0.28.3)(pg@8.16.3)(postgres@3.4.7))
       ioredis: 5.6.1
 
   untun@0.1.3:
@@ -33796,7 +33948,7 @@ snapshots:
     optionalDependencies:
       typescript: 5.6.3
 
-  vue@3.5.13(typescript@5.6.3):
+  vue@3.5.13(typescript@5.8.3):
     dependencies:
       "@vue/compiler-dom": 3.5.13
       "@vue/compiler-sfc": 3.5.13
@@ -33919,7 +34071,7 @@ snapshots:
       available-typed-arrays: 1.0.7
       call-bind: 1.0.7
       for-each: 0.3.3
-      gopd: 1.2.0
+      gopd: 1.0.1
       has-tostringtag: 1.0.2
 
   which-typed-array@1.1.19:
@@ -34149,22 +34301,22 @@ snapshots:
 
   xtend@4.0.2: {}
 
-  y-codemirror.next@0.3.5(@codemirror/state@6.5.0)(@codemirror/view@6.35.2)(yjs@13.6.20):
+  y-codemirror.next@0.3.5(@codemirror/state@6.5.0)(@codemirror/view@6.35.2)(yjs@13.6.26):
     dependencies:
       "@codemirror/state": 6.5.0
       "@codemirror/view": 6.35.2
       lib0: 0.2.99
-      yjs: 13.6.20
+      yjs: 13.6.26
 
-  y-indexeddb@9.0.12(yjs@13.6.20):
+  y-indexeddb@9.0.12(yjs@13.6.26):
     dependencies:
       lib0: 0.2.99
-      yjs: 13.6.20
+      yjs: 13.6.26
 
-  y-protocols@1.0.6(yjs@13.6.20):
+  y-protocols@1.0.6(yjs@13.6.26):
     dependencies:
       lib0: 0.2.99
-      yjs: 13.6.20
+      yjs: 13.6.26
 
   y18n@5.0.8: {}
 
