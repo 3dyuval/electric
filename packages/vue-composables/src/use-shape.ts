@@ -1,11 +1,11 @@
 import {
-  GetExtensions,
-  Row,
   Shape,
   ShapeStream,
   ShapeStreamOptions,
+  Row,
+  GetExtensions,
 } from '@electric-sql/client'
-import { onUnmounted, Ref, ref } from 'vue'
+import { Ref, onUnmounted, toRef, watch, ref } from 'vue'
 
 type UnknownShape = Shape<Row<unknown>>
 type UnknownShapeStream = ShapeStream<Row<unknown>>
@@ -139,7 +139,7 @@ export interface UseShapeResult<T extends Row<unknown> = Row> {
    * Ref containing the error state of the Shape
    * @type {Ref<Shape<T>['error']>}
    */
-  error: Ref<Shape<T>[`error`]>
+  error: Ref<Shape<T>['error']>
   /**
    * Ref indicating if there is an error
    * @type {Ref<boolean>}
