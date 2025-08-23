@@ -289,3 +289,4 @@ const isLoading = computed(() => users.isLoading.value || posts.isLoading.value)
 - Move complex data transformations to computed properties
 
 You can read more on Shape Performance [here](/docs/guides/shapes).
+

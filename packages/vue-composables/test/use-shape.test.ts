@@ -1,12 +1,12 @@
-import { setTimeout as sleep } from 'node:timers/promises'
-import { Shape } from '@electric-sql/client'
-import { mount } from '@vue/test-utils'
 import { describe, expect, inject } from 'vitest'
+import { mount } from '@vue/test-utils'
 import { defineComponent } from 'vue'
-import { useShape } from '../src/use-shape'
+import { setTimeout as sleep } from 'node:timers/promises'
 import { testWithIssuesTable as it } from './support/test-context'
+import { useShape } from '../src/use-shape'
+import { Shape } from '@electric-sql/client'
 
-const BASE_URL = inject(`baseUrl`)
+const BASE_URL = inject('baseUrl')
 
 // Helper to wait for a condition
 async function waitFor(
@@ -14,7 +14,6 @@ async function waitFor(
   options = { timeout: 1000 }
 ) {
   const start = Date.now()
-  // eslint-disable-next-line no-constant-condition
   while (true) {
     try {
       const result = callback()
@@ -30,8 +29,8 @@ async function waitFor(
   }
 }
 
-describe(`useShape`, () => {
-  it(`should sync an empty shape`, async ({ aborter, issuesTableUrl }) => {
+describe('useShape', () => {
+  it('should sync an empty shape', async ({ aborter, issuesTableUrl }) => {
     const TestComponent = defineComponent({
       setup() {
         const result = useShape({
@@ -44,7 +43,7 @@ describe(`useShape`, () => {
         })
         return { result }
       },
-      template: `<div>Test Component</div>`,
+      template: '<div>Test Component</div>',
     })
 
     const wrapper = mount(TestComponent)
@@ -57,12 +56,12 @@ describe(`useShape`, () => {
     wrapper.unmount()
   })
 
-  it(`should sync a shape`, async ({
+  it('should sync a shape', async ({
     aborter,
     issuesTableUrl,
     insertIssues,
   }) => {
-    const [id] = await insertIssues({ title: `test row` })
+    const [id] = await insertIssues({ title: 'test row' })
 
     const TestComponent = defineComponent({
       setup() {
@@ -76,19 +75,19 @@ describe(`useShape`, () => {
         })
         return { result }
       },
-      template: `<div>Test Component</div>`,
+      template: '<div>Test Component</div>',
     })
 
     const wrapper = mount(TestComponent)
 
     await waitFor(() =>
-      expect(wrapper.vm.result.data).toEqual([{ id: id, title: `test row` }])
+      expect(wrapper.vm.result.data).toEqual([{ id: id, title: 'test row' }])
     )
 
     wrapper.unmount()
   })
 
-  it(`should re-sync a shape after an interrupt`, async ({
+  it('should re-sync a shape after an interrupt', async ({
     aborter,
     issuesTableUrl,
     insertIssues,
@@ -107,14 +106,14 @@ describe(`useShape`, () => {
         })
         return { result }
       },
-      template: `<div>Test Component</div>`,
+      template: '<div>Test Component</div>',
     })
 
     const wrapper1 = mount(TestComponent1)
     wrapper1.unmount()
     manualAborter.abort()
 
-    const [id] = await insertIssues({ title: `test row` })
+    const [id] = await insertIssues({ title: 'test row' })
 
     const TestComponent2 = defineComponent({
       setup() {
@@ -128,19 +127,19 @@ describe(`useShape`, () => {
         })
         return { result }
       },
-      template: `<div>Test Component</div>`,
+      template: '<div>Test Component</div>',
     })
 
     const wrapper2 = mount(TestComponent2)
 
     await waitFor(() =>
-      expect(wrapper2.vm.result.data).toEqual([{ id: id, title: `test row` }])
+      expect(wrapper2.vm.result.data).toEqual([{ id: id, title: 'test row' }])
     )
 
     wrapper2.unmount()
   })
 
-  it(`should expose isLoading status`, async ({ aborter, issuesTableUrl }) => {
+  it('should expose isLoading status', async ({ aborter, issuesTableUrl }) => {
     const TestComponent = defineComponent({
       setup() {
         const result = useShape({
@@ -153,7 +152,7 @@ describe(`useShape`, () => {
         })
         return { result }
       },
-      template: `<div>Test Component</div>`,
+      template: '<div>Test Component</div>',
     })
 
     const wrapper = mount(TestComponent)
@@ -165,7 +164,7 @@ describe(`useShape`, () => {
     wrapper.unmount()
   })
 
-  it(`should expose time at which we last synced`, async ({
+  it('should expose time at which we last synced', async ({
     aborter,
     issuesTableUrl,
   }) => {
@@ -181,7 +180,7 @@ describe(`useShape`, () => {
         })
         return { result }
       },
-      template: `<div>Test Component</div>`,
+      template: '<div>Test Component</div>',
     })
 
     const wrapper = mount(TestComponent)
@@ -197,7 +196,7 @@ describe(`useShape`, () => {
     wrapper.unmount()
   })
 
-  it(`should keep the state value in sync`, async ({
+  it('should keep the state value in sync', async ({
     aborter,
     issuesTableUrl,
     insertIssues,
@@ -215,7 +214,7 @@ describe(`useShape`, () => {
         })
         return { result }
       },
-      template: `<div>Test Component</div>`,
+      template: '<div>Test Component</div>',
     })
 
     const wrapper = mount(TestComponent)
@@ -228,7 +227,7 @@ describe(`useShape`, () => {
       )
     } catch (e) {
       // Continue anyway if timeout
-      console.log(`Continuing despite data not loading`)
+      console.log('Continuing despite data not loading')
     }
 
     // Wait for sync
@@ -236,11 +235,11 @@ describe(`useShape`, () => {
       await parallelWaiterStream?.waitForSyncToComplete?.()
     } catch (e) {
       // Continue anyway if this fails
-      console.log(`Continuing despite sync failure`)
+      console.log('Continuing despite sync failure')
     }
 
     const issue = {
-      title: `test row`,
+      title: 'test row',
     }
 
     // Insert an issue
@@ -255,13 +254,13 @@ describe(`useShape`, () => {
     wrapper.unmount()
   })
 
-  it(`should let you change the shape definition (and clear the internal cache between)`, async ({
+  it('should let you change the shape definition (and clear the internal cache between)', async ({
     aborter,
     issuesTableUrl,
     insertIssues,
   }) => {
-    const [id] = await insertIssues({ title: `test row` })
-    const [id2] = await insertIssues({ title: `test row2` })
+    const [id] = await insertIssues({ title: 'test row' })
+    const [id2] = await insertIssues({ title: 'test row2' })
 
     const ParentComponent = defineComponent({
       props: {
@@ -282,7 +281,7 @@ describe(`useShape`, () => {
         })
         return { result }
       },
-      template: `<div>Test Component</div>`,
+      template: '<div>Test Component</div>',
     })
 
     const wrapper = mount(ParentComponent, {
@@ -292,7 +291,7 @@ describe(`useShape`, () => {
     })
 
     await waitFor(() =>
-      expect(wrapper.vm.result.data).toEqual([{ id: id, title: `test row` }])
+      expect(wrapper.vm.result.data).toEqual([{ id: id, title: 'test row' }])
     )
 
     // Change the props to change the shape definition
@@ -305,13 +304,13 @@ describe(`useShape`, () => {
     wrapper.unmount()
   })
 
-  it(`should unmount cleanly`, async ({
+  it('should unmount cleanly', async ({
     aborter,
     insertIssues,
     issuesTableUrl,
-    _parallelWaiterStream,
+    parallelWaiterStream,
   }) => {
-    const [_id] = await insertIssues({ title: `test row` })
+    const [id] = await insertIssues({ title: 'test row' })
 
     const TestComponent = defineComponent({
       setup() {
@@ -324,14 +323,14 @@ describe(`useShape`, () => {
           subscribe: true,
         })
         // Create a local snapshot to test against after unmount
-        let snapshot: unknown[] = []
+        let snapshot: any[] = []
         const updateSnapshot = () => {
           snapshot = [...result.data]
         }
 
         return { result, snapshot, updateSnapshot }
       },
-      template: `<div>Test Component</div>`,
+      template: '<div>Test Component</div>',
     })
 
     const wrapper = mount(TestComponent)
@@ -344,7 +343,7 @@ describe(`useShape`, () => {
       )
     } catch (e) {
       // Continue anyway if timeout
-      console.log(`Continuing despite data not loading`)
+      console.log('Continuing despite data not loading')
     }
 
     // Take a snapshot of the current data
@@ -354,7 +353,7 @@ describe(`useShape`, () => {
     wrapper.unmount()
 
     // Insert a new issue (which should NOT appear in our unmounted component)
-    await insertIssues({ title: `test row2 - would be different` })
+    await insertIssues({ title: 'test row2 - would be different' })
 
     // Wait a bit to ensure any potential updates would have happened
     await sleep(100)
