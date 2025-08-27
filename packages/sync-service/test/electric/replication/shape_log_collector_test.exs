@@ -17,6 +17,7 @@ defmodule Electric.Replication.ShapeLogCollectorTest do
   import Support.ComponentSetup,
     only: [
       with_in_memory_storage: 1,
+      with_shape_status: 1,
       with_stack_id_from_test: 1,
       with_noop_publication_manager: 1,
       with_persistent_kv: 1
@@ -29,6 +30,7 @@ defmodule Electric.Replication.ShapeLogCollectorTest do
   setup [
     :with_stack_id_from_test,
     :with_in_memory_storage,
+    :with_shape_status,
     :with_noop_publication_manager,
     :with_persistent_kv
   ]
@@ -39,6 +41,7 @@ defmodule Electric.Replication.ShapeLogCollectorTest do
              )
 
   @shape Shape.new!("test_table", inspector: @inspector)
+  @shape_handle "the-shape-handle"
 
   def setup_log_collector(ctx) do
     # Start a test Registry
@@ -60,20 +63,12 @@ defmodule Electric.Replication.ShapeLogCollectorTest do
 
     Repatch.allow(self(), pid)
 
-    Mock.ShapeStatus
-    |> expect(:initialise, 1, fn _opts -> {:ok, %{}} end)
-    |> expect(:list_shapes, 1, fn _ -> [] end)
-    # allow the ShapeCache to call this mock
-    |> allow(self(), fn ->
-      GenServer.whereis(Electric.ShapeCache.name(ctx.stack_id))
-    end)
-
     shape_cache_opts =
       [
         storage: {Mock.Storage, []},
         chunk_bytes_threshold: Electric.ShapeCache.LogChunker.default_chunk_size_threshold(),
         inspector: {Mock.Inspector, elem(@inspector, 1)},
-        shape_status: Mock.ShapeStatus,
+        shape_status: ctx.shape_status,
         publication_manager: ctx.publication_manager,
         log_producer: ShapeLogCollector.name(ctx.stack_id),
         stack_id: ctx.stack_id,
@@ -108,7 +103,15 @@ defmodule Electric.Replication.ShapeLogCollectorTest do
               id: {:consumer, id},
               start:
                 {Support.TransactionConsumer, :start_link,
-                 [[id: id, parent: parent, producer: ctx.server, shape: @shape]]},
+                 [
+                   [
+                     id: id,
+                     parent: parent,
+                     producer: ctx.server,
+                     shape: @shape,
+                     shape_handle: "#{@shape_handle}-#{id}"
+                   ]
+                 ]},
               restart: :temporary
             })
 
@@ -188,7 +191,7 @@ defmodule Electric.Replication.ShapeLogCollectorTest do
       1..@num_comparisons
       |> Enum.reduce({1, 0, 1, 0}, fn _, {xid, prev_xid, lsn_int, prev_lsn_int} ->
         # advance xid and lsn randomly along their potential values to simulate
-        # trnasactions coming in at different points in the DBs lifetime
+        # transactions coming in at different points in the DBs lifetime
         xid = xid + (:rand.uniform(2 ** 32 - xid) - 1)
         prev_xid = xid - (:rand.uniform(xid - prev_xid) + 1)
         lsn_int = lsn_int + (:rand.uniform(2 ** 64 - lsn_int) - 1)
@@ -222,6 +225,71 @@ defmodule Electric.Replication.ShapeLogCollectorTest do
         {xid, prev_xid, lsn_int, prev_lsn_int}
       end)
     end
+
+    # This is a regression test. It used to fail before #2853 was fixed.
+    test "succeeds in building a key for a change containing null", ctx do
+      Mock.Inspector
+      |> stub(:load_column_info, fn 1234, _ ->
+        {:ok,
+         [
+           %{name: "id", pk_position: nil},
+           %{name: "name", pk_position: nil}
+         ]}
+      end)
+      |> allow(self(), ctx.server)
+
+      change = %Changes.NewRecord{
+        relation: {"public", "test_table"},
+        record: %{"id" => nil, "name" => "foo"}
+      }
+
+      txn =
+        %Transaction{xid: 1, lsn: 1, last_log_offset: LogOffset.new(1, 0)}
+        |> Transaction.prepend_change(change)
+
+      assert :ok = ShapeLogCollector.store_transaction(txn, ctx.server)
+    end
+
+    test "correctly handles flush notifications", ctx do
+      lsn = Lsn.from_string("0/10")
+
+      Mock.Inspector
+      |> stub(:load_relation_oid, fn {"public", "test_table"}, _ ->
+        {:ok, {1234, {"public", "test_table"}}}
+      end)
+      |> stub(:load_relation_info, fn 1234, _ ->
+        {:ok, %{id: 1234, schema: "public", name: "test_table", parent: nil, children: nil}}
+      end)
+      |> stub(:load_column_info, fn 1234, _ ->
+        {:ok, [%{pk_position: 0, name: "id", is_generated: false}]}
+      end)
+      |> allow(self(), ctx.server)
+
+      {:via, Registry, {name, key}} = Electric.Postgres.ReplicationClient.name(ctx.stack_id)
+
+      Registry.register(name, key, nil)
+
+      txn =
+        %Transaction{xid: 100, lsn: lsn}
+        |> Transaction.prepend_change(%Changes.NewRecord{
+          relation: {"public", "test_table"},
+          record: %{"id" => "2", "name" => "foo"},
+          log_offset: LogOffset.new(lsn, 0)
+        })
+        |> Transaction.finalize()
+
+      assert :ok = ShapeLogCollector.store_transaction(txn, ctx.server)
+      refute_receive {:flush_boundary_updated, _}, 50
+
+      ShapeLogCollector.notify_flushed(ctx.server, @shape_handle <> "-1", txn.last_log_offset)
+      refute_receive {:flush_boundary_updated, _}, 50
+      ShapeLogCollector.notify_flushed(ctx.server, @shape_handle <> "-2", txn.last_log_offset)
+      refute_receive {:flush_boundary_updated, _}, 50
+      ShapeLogCollector.notify_flushed(ctx.server, @shape_handle <> "-3", txn.last_log_offset)
+
+      expected_lsn = Lsn.to_integer(lsn)
+      assert_receive {:flush_boundary_updated, ^expected_lsn}, 100
+    end
   end
 
   describe "handle_relation_msg/2" do
@@ -246,7 +314,15 @@ defmodule Electric.Replication.ShapeLogCollectorTest do
               id: {:consumer, id},
               start:
                 {Support.TransactionConsumer, :start_link,
-                 [[id: id, parent: parent, producer: ctx.server, shape: @shape]]},
+                 [
+                   [
+                     id: id,
+                     parent: parent,
+                     producer: ctx.server,
+                     shape: @shape,
+                     shape_handle: "#{@shape_handle}-#{id}"
+                   ]
+                 ]},
               restart: :temporary
             })
 
@@ -343,7 +419,11 @@ defmodule Electric.Replication.ShapeLogCollectorTest do
     consumer =
       start_link_supervised!(
         {Support.TransactionConsumer,
-         id: consumer_id, parent: self(), producer: pid, shape: @shape}
+         id: consumer_id,
+         parent: self(),
+         producer: pid,
+         shape: @shape,
+         shape_handle: @shape_handle}
       )
 
     consumers = [{consumer_id, consumer}]

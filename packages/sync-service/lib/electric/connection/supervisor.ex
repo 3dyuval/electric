@@ -77,13 +77,20 @@ defmodule Electric.Connection.Supervisor do
     persistent_kv = Keyword.fetch!(opts, :persistent_kv)
     tweaks = Keyword.fetch!(opts, :tweaks)
 
+    shape_status_agent_spec =
+      {Electric.ShapeCache.ShapeStatusAgent,
+       [stack_id: stack_id, shape_status: Keyword.fetch!(shape_cache_opts, :shape_status)]}
+
+    consumer_supervisor_spec = {Electric.Shapes.DynamicConsumerSupervisor, [stack_id: stack_id]}
+
     shape_cache_spec = {Electric.ShapeCache, shape_cache_opts}
 
     publication_manager_spec =
       {Electric.Replication.PublicationManager,
        stack_id: stack_id,
        publication_name: Keyword.fetch!(replication_opts, :publication_name),
-       pg_version: Keyword.fetch!(opts, :pg_version),
+       can_alter_publication?: Keyword.fetch!(opts, :can_alter_publication?),
+       manual_table_publishing?: Keyword.fetch!(opts, :manual_table_publishing?),
        db_pool: Keyword.fetch!(db_pool_opts, :name),
        update_debounce_timeout: Keyword.get(tweaks, :publication_alter_debounce_ms, 0)}
 
@@ -95,13 +102,16 @@ defmodule Electric.Connection.Supervisor do
       {Electric.Replication.SchemaReconciler,
        stack_id: stack_id,
        inspector: inspector,
-       shape_cache: {Electric.ShapeCache, stack_id: stack_id}}
+       shape_cache: {Electric.ShapeCache, stack_id: stack_id},
+       period: Keyword.get(tweaks, :schema_reconciler_period, 60_000)}
 
     child_spec =
       Supervisor.child_spec(
         {
           Electric.Replication.Supervisor,
           stack_id: stack_id,
+          shape_status_agent: shape_status_agent_spec,
+          consumer_supervisor: consumer_supervisor_spec,
           shape_cache: shape_cache_spec,
           publication_manager: publication_manager_spec,
           log_collector: shape_log_collector_spec,

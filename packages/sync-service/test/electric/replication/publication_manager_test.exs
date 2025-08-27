@@ -1,12 +1,12 @@
 defmodule Electric.Replication.PublicationManagerTest do
-  alias Electric.Replication.Eval.Expr
-  alias Electric.Replication.PublicationManager.RelationFilter
-  alias Electric.Shapes.Shape
-  alias Electric.Replication.PublicationManager
-
   use ExUnit.Case, async: true
 
   import Support.ComponentSetup
+  import Support.TestUtils
+
+  alias Electric.Replication.Eval.Expr
+  alias Electric.Replication.PublicationManager.RelationFilter
+  alias Electric.Replication.PublicationManager
 
   @shape_handle_1 "shape_handle_1"
   @shape_handle_2 "shape_handle_2"
@@ -19,24 +19,6 @@ defmodule Electric.Replication.PublicationManagerTest do
     used_refs: %{["foo_enum"] => {:enum, "foo_enum"}}
   }
 
-  defp generate_shape(relation, where_clause \\ nil, selected_columns \\ nil) do
-    all_columns = Enum.uniq(["id", "value", "foo_enum"] ++ (selected_columns || []))
-    selected_columns = selected_columns || all_columns
-
-    %Shape{
-      root_table: relation,
-      root_table_id: 1,
-      root_pk: ["id"],
-      selected_columns: selected_columns,
-      flags: %{
-        selects_all_columns: selected_columns == all_columns,
-        non_primitive_columns_in_where:
-          where_clause && is_map_key(where_clause.used_refs, ["foo_enum"])
-      },
-      where: where_clause
-    }
-  end
-
   def clean_all_shapes_for_relations(relations, [parent_pid]) do
     send(parent_pid, {:clean_all_shapes_for_relations, relations})
   end
@@ -46,7 +28,7 @@ defmodule Electric.Replication.PublicationManagerTest do
   setup ctx do
     test_pid = self()
 
-    configure_tables_fn = fn _, _, filters, _, _ ->
+    configure_tables_fn = fn _, _, filters, _ ->
       send(test_pid, {:filters, Map.values(filters)})
       Map.get(ctx, :returned_relations, [])
     end
@@ -60,7 +42,6 @@ defmodule Electric.Replication.PublicationManagerTest do
         shape_cache: {__MODULE__, [self()]},
         publication_name: "pub_#{ctx.stack_id}",
         pool: :no_pool,
-        pg_version: Access.get(ctx, :pg_version, 150_001),
         configure_tables_for_replication_fn: configure_tables_fn
       })
 
@@ -113,7 +94,7 @@ defmodule Electric.Replication.PublicationManagerTest do
                       ]}
     end
 
-    test "should merge where clauses for same relation", %{opts: opts} do
+    test "should not update publication when only the where clause changes", %{opts: opts} do
       shape1 = generate_shape({"public", "items"}, @where_clause_1)
       shape2 = generate_shape({"public", "items"}, @where_clause_2)
       shape3 = generate_shape({"public", "items"}, @where_clause_1)
@@ -121,28 +102,16 @@ defmodule Electric.Replication.PublicationManagerTest do
       assert :ok == PublicationManager.add_shape(@shape_handle_2, shape2, opts)
       assert :ok == PublicationManager.add_shape(@shape_handle_3, shape3, opts)
 
+      # Since only the first addition of the shape makes changes to the publication, we only expect to see the first where clause.
       assert_receive {:filters,
                       [
                         %RelationFilter{
                           relation: {"public", "items"},
-                          where_clauses: [@where_clause_2, @where_clause_1]
+                          where_clauses: [@where_clause_1]
                         }
                       ]}
-    end
 
-    test "should remove where clauses when one covers everything", %{opts: opts} do
-      shape1 = generate_shape({"public", "items"}, @where_clause_1)
-      shape2 = generate_shape({"public", "items"}, nil)
-      assert :ok == PublicationManager.add_shape(@shape_handle_1, shape1, opts)
-      assert :ok == PublicationManager.add_shape(@shape_handle_3, shape2, opts)
-
-      assert_receive {:filters,
-                      [
-                        %RelationFilter{
-                          relation: {"public", "items"},
-                          where_clauses: nil
-                        }
-                      ]}
+      refute_receive {:filters, _}, 500
     end
 
     test "should ignore where clauses that use unsupported column types (enums)", %{opts: opts} do
@@ -213,7 +182,7 @@ defmodule Electric.Replication.PublicationManagerTest do
                       ]}
     end
 
-    @tag update_debounce_timeout: 50
+    @tag update_debounce_timeout: 100
     test "should not update publication if new shape adds nothing", %{opts: opts} do
       shape1 = generate_shape({"public", "items"}, @where_clause_1)
       shape2 = generate_shape({"public", "items"}, @where_clause_2)
@@ -235,89 +204,6 @@ defmodule Electric.Replication.PublicationManagerTest do
       assert :ok == PublicationManager.add_shape(@shape_handle_3, shape3, opts)
 
       refute_receive {:filters, _}, 500
-    end
-
-    @tag update_debounce_timeout: 100
-    @tag pg_version: 14_0001
-    test "should not update publication if new shape adds nothing when where clauses aren't considered",
-         %{opts: opts} do
-      shape1 = generate_shape({"public", "items"}, @where_clause_1)
-      shape2 = generate_shape({"public", "items"}, @where_clause_2)
-      # different clause, but PG 14 doesn't support those filters
-      shape3 = generate_shape({"public", "items"}, @where_clause_3)
-
-      task1 = Task.async(fn -> PublicationManager.add_shape(@shape_handle_1, shape1, opts) end)
-      task2 = Task.async(fn -> PublicationManager.add_shape(@shape_handle_2, shape2, opts) end)
-
-      Task.await_many([task1, task2])
-
-      assert_receive {:filters,
-                      [
-                        %RelationFilter{
-                          relation: {"public", "items"},
-                          where_clauses: nil
-                        }
-                      ]}
-
-      assert :ok == PublicationManager.add_shape(@shape_handle_3, shape3, opts)
-
-      refute_receive {:filters, _}, 500
-    end
-
-    test "should fallback to relation-only filtering if we cannot do row filtering", %{
-      ctx: ctx,
-      opts: opts
-    } do
-      stop_supervised!(opts[:server])
-
-      test_id = self()
-
-      configure_tables_fn = fn _, _old_relations, filters, _, _ ->
-        if filters |> Map.values() |> Enum.any?(&(&1.where_clauses != nil)) do
-          send(test_id, {:got_filters, :with_where_clauses})
-          raise %Postgrex.Error{postgres: %{code: :feature_not_supported}}
-        end
-
-        send(test_id, {:got_filters, :without_where_clauses})
-        []
-      end
-
-      %{publication_manager: {_, publication_manager_opts}} =
-        with_publication_manager(%{
-          module: ctx.module,
-          test: ctx.test,
-          stack_id: ctx.stack_id,
-          update_debounce_timeout: Access.get(ctx, :update_debounce_timeout, 0),
-          publication_name: "pub_#{ctx.stack_id}",
-          pool: :no_pool,
-          pg_version: 150_001,
-          configure_tables_for_replication_fn: configure_tables_fn
-        })
-
-      shape1 = generate_shape({"public", "items"}, @where_clause_1)
-      shape2 = generate_shape({"public", "items"}, @where_clause_2)
-      shape3 = generate_shape({"public", "items_other"}, @where_clause_2)
-
-      # should fall back to relation-only filtering
-      assert :ok ==
-               PublicationManager.add_shape(@shape_handle_1, shape1, publication_manager_opts)
-
-      assert_receive {:got_filters, :with_where_clauses}
-      assert_receive {:got_filters, :without_where_clauses}
-      refute_receive {:got_filters, _}, 50
-
-      # should remain in relation-only filtering mode after that, which
-      # only updates the publication if the tracked relations change
-      assert :ok ==
-               PublicationManager.add_shape(@shape_handle_2, shape2, publication_manager_opts)
-
-      refute_receive {:got_filters, _}, 50
-
-      assert :ok ==
-               PublicationManager.add_shape(@shape_handle_3, shape3, publication_manager_opts)
-
-      assert_receive {:got_filters, :without_where_clauses}
-      refute_receive {:got_filters, _}, 50
     end
 
     @tag returned_relations: [{10, {"public", "another_table"}}]
@@ -433,6 +319,56 @@ defmodule Electric.Replication.PublicationManagerTest do
                           where_clauses: [@where_clause_1]
                         }
                       ]}
+    end
+  end
+
+  describe "missing publication handling" do
+    test "add_shape raises and server stops when publication is missing", ctx do
+      stop_supervised!(ctx.opts[:server])
+
+      # Simulate the PublicationManager detecting a missing publication (undefined_object 42704)
+      missing_pub_error = %Postgrex.Error{
+        postgres: %{
+          code: :undefined_object,
+          pg_code: "42704",
+          severity: "ERROR",
+          message: "publication \"pub_#{ctx.stack_id}\" does not exist"
+        }
+      }
+
+      configure_tables_fn = fn _pool, _publication_name, _filters, _opts ->
+        raise missing_pub_error
+      end
+
+      # Start a fresh publication manager with the failing configure function
+      %{publication_manager: {_, publication_manager_opts}} =
+        with_publication_manager(%{
+          module: ctx.module,
+          test: ctx.test,
+          stack_id: ctx.stack_id,
+          update_debounce_timeout: 0,
+          shape_cache: {__MODULE__, [self()]},
+          publication_name: "pub_#{ctx.stack_id}",
+          pool: :no_pool,
+          configure_tables_for_replication_fn: configure_tables_fn
+        })
+
+      pid = GenServer.whereis(publication_manager_opts[:server])
+      mref = Process.monitor(pid)
+      Process.unlink(pid)
+
+      shape = generate_shape({"public", "items"}, @where_clause_1)
+
+      raised =
+        assert_raise(Postgrex.Error, fn ->
+          PublicationManager.add_shape(@shape_handle_1, shape, publication_manager_opts)
+        end)
+
+      assert raised.postgres.code == :undefined_object
+
+      # Ensure the GenServer terminates with the expected shutdown reason containing the error
+      assert_receive {:DOWN, ^mref, :process, ^pid,
+                      {:shutdown, %Postgrex.Error{postgres: %{code: :undefined_object}}}}
     end
   end
 end

@@ -106,8 +106,16 @@ defmodule Electric.StackSupervisor do
                          on_remove: [type: {:fun, 2}],
                          on_cleanup: [type: {:fun, 1}]
                        ]
-                     ]
+                     ],
+                     schema_reconciler_period: [type: :non_neg_integer, default: 60_000]
                    ]
+                 ],
+                 manual_table_publishing?: [
+                   type: :boolean,
+                   required: false,
+                   doc:
+                     "Specify whether tables are to be added to the Postgres publication automatically or by hand",
+                   default: false
                  ],
                  telemetry_opts: [type: :keyword_list, default: []],
                  telemetry_span_attrs: [
@@ -282,10 +290,18 @@ defmodule Electric.StackSupervisor do
 
     shape_changes_registry_name = registry_name(stack_id)
 
+    shape_status =
+      {ShapeStatus,
+       ShapeStatus.opts(
+         shape_meta_table: ShapeStatus.shape_meta_table(stack_id),
+         storage: storage
+       )}
+
     shape_cache_opts = [
       stack_id: stack_id,
       storage: storage,
       inspector: inspector,
+      shape_status: shape_status,
       publication_manager: {Electric.Replication.PublicationManager, stack_id: stack_id},
       chunk_bytes_threshold: config.chunk_bytes_threshold,
       log_producer: shape_log_collector,
@@ -320,7 +336,8 @@ defmodule Electric.StackSupervisor do
       ],
       persistent_kv: config.persistent_kv,
       shape_cache_opts: shape_cache_opts,
-      tweaks: tweaks
+      tweaks: tweaks,
+      manual_table_publishing?: config.manual_table_publishing?
     ]
 
     registry_partitions =
@@ -340,12 +357,6 @@ defmodule Electric.StackSupervisor do
       else
         []
       end
-
-    shape_status =
-      {ShapeStatus,
-       %ShapeStatus{
-         shape_meta_table: Electric.ShapeCache.get_shape_meta_table(stack_id: stack_id)
-       }}
 
     children =
       telemetry_children ++

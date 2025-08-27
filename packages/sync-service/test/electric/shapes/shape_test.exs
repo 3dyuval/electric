@@ -344,7 +344,7 @@ defmodule Electric.Shapes.ShapeTest do
            "CREATE TABLE IF NOT EXISTS col_table (id INT PRIMARY KEY, value1 TEXT, value2 TEXT)"
          ]
     test "validates selected columns for invalid columns", %{inspector: inspector} do
-      assert {:error, {:columns, ["The following columns could not be found: invalid"]}} =
+      assert {:error, {:columns, ["The following columns are not found on the table: invalid"]}} =
                Shape.new("col_table", inspector: inspector, columns: ["id", "invalid"])
     end
 
@@ -352,7 +352,9 @@ defmodule Electric.Shapes.ShapeTest do
            "CREATE TABLE IF NOT EXISTS col_table (id INT PRIMARY KEY, value1 TEXT, value2 TEXT)"
          ]
     test "validates selected columns for missing PK columns", %{inspector: inspector} do
-      assert {:error, {:columns, ["Must include all primary key columns, missing: id"]}} =
+      assert {:error,
+              {:columns,
+               ["The list of columns must include all primary key columns, missing: id"]}} =
                Shape.new("col_table", inspector: inspector, columns: ["value1"])
     end
 
@@ -375,7 +377,10 @@ defmodule Electric.Shapes.ShapeTest do
     test "validates selected columns for generated columns", %{inspector: inspector} do
       assert {:error,
               {:columns,
-               ["The following columns are generated and cannot be included in replication: id"]}} =
+               [
+                 "The following columns are generated and cannot be included in the shape: id. " <>
+                   "You can exclude them from the shape by explicitly listing which columns to fetch in the 'columns' query param"
+               ]}} =
                Shape.new("gen_col_table", inspector: inspector)
     end
 
@@ -385,6 +390,50 @@ defmodule Electric.Shapes.ShapeTest do
     test "validates where clause return type", %{inspector: inspector} do
       assert {:error, {:where, "WHERE clause must return a boolean"}} =
                Shape.new("testing_table", inspector: inspector, where: "id")
+    end
+
+    @tag with_sql: [
+           "CREATE TABLE IF NOT EXISTS parent (id INT PRIMARY KEY)",
+           "CREATE TABLE IF NOT EXISTS child (id INT PRIMARY KEY, par_id INT REFERENCES parent(id))"
+         ]
+    test "correctly creates nested shapes", %{inspector: inspector} do
+      assert {:ok,
+              %Shape{
+                root_table: {"public", "child"},
+                where: %{query: "par_id IN (SELECT id FROM parent WHERE id > 5)"},
+                shape_dependencies: [
+                  %Shape{
+                    root_table: {"public", "parent"},
+                    root_pk: ["id"],
+                    selected_columns: ["id"],
+                    where: %{query: "id > 5"}
+                  }
+                ]
+              } = outer_shape} =
+               Shape.new("child",
+                 inspector: inspector,
+                 where: "par_id IN (SELECT id FROM parent where id > 5)"
+               )
+
+      assert [_] =
+               Shape.convert_change(
+                 outer_shape,
+                 %Changes.NewRecord{
+                   relation: {"public", "child"},
+                   record: %{"id" => "1", "par_id" => "1"}
+                 },
+                 %{["$sublink", "0"] => MapSet.new([1])}
+               )
+
+      assert [] =
+               Shape.convert_change(
+                 outer_shape,
+                 %Changes.NewRecord{
+                   relation: {"public", "child"},
+                   record: %{"id" => "1", "par_id" => "1"}
+                 },
+                 %{["$sublink", "0"] => MapSet.new([2])}
+               )
     end
   end
 

@@ -113,12 +113,12 @@ defmodule Support.ComponentSetup do
             publication_name: ctx.publication_name,
             update_debounce_timeout: Access.get(ctx, :update_debounce_timeout, 0),
             db_pool: ctx.pool,
-            pg_version: Access.get(ctx, :pg_version, 150_001),
+            manual_table_publishing?: Access.get(ctx, :manual_table_publishing?, false),
             configure_tables_for_replication_fn:
               Access.get(
                 ctx,
                 :configure_tables_for_replication_fn,
-                &Electric.Postgres.Configuration.configure_publication!/5
+                &Electric.Postgres.Configuration.configure_publication!/4
               ),
             shape_cache:
               Access.get(ctx, :shape_cache, {Electric.ShapeCache, [stack_id: ctx.stack_id]})
@@ -142,6 +142,33 @@ defmodule Support.ComponentSetup do
     %{publication_manager: {NoopPublicationManager, []}}
   end
 
+  def with_shape_status(ctx) do
+    shape_status_opts =
+      Electric.ShapeCache.ShapeStatus.opts(
+        shape_meta_table: Electric.ShapeCache.ShapeStatus.shape_meta_table(ctx.stack_id),
+        storage: Map.get(ctx, :storage, {Mock.Storage, []})
+      )
+
+    start_link_supervised!(%{
+      id: "shape_status_agent",
+      start:
+        {Electric.ShapeCache.ShapeStatusAgent, :start_link,
+         [
+           [
+             stack_id: ctx.stack_id,
+             shape_status: {Electric.ShapeCache.ShapeStatus, shape_status_opts}
+           ]
+         ]},
+      restart: :temporary
+    })
+
+    %{
+      shape_status_agent: "shape_status_agent",
+      shape_status_opts: shape_status_opts,
+      shape_status: {Electric.ShapeCache.ShapeStatus, shape_status_opts}
+    }
+  end
+
   def with_shape_cache(ctx, additional_opts \\ []) do
     server = :"shape_cache_#{full_test_name(ctx)}"
     consumer_supervisor = :"consumer_supervisor_#{full_test_name(ctx)}"
@@ -157,6 +184,7 @@ defmodule Support.ComponentSetup do
         name: server,
         stack_id: ctx.stack_id,
         inspector: ctx.inspector,
+        shape_status: ctx.shape_status,
         storage: ctx.storage,
         publication_manager: ctx.publication_manager,
         chunk_bytes_threshold: ctx.chunk_bytes_threshold,
@@ -183,21 +211,17 @@ defmodule Support.ComponentSetup do
       restart: :temporary
     })
 
-    shape_meta_table = ShapeCache.get_shape_meta_table(stack_id: ctx.stack_id)
-
     shape_cache_opts = [
       stack_id: ctx.stack_id,
       server: server,
-      storage: ctx.storage,
-      shape_meta_table: shape_meta_table
+      storage: ctx.storage
     ]
 
     %{
       shape_cache_opts: shape_cache_opts,
       shape_cache: {ShapeCache, shape_cache_opts},
       shape_cache_server: server,
-      consumer_supervisor: consumer_supervisor,
-      shape_meta_table: shape_meta_table
+      consumer_supervisor: consumer_supervisor
     }
   end
 
@@ -262,8 +286,6 @@ defmodule Support.ComponentSetup do
   end
 
   def with_shape_monitor(ctx) do
-    alias Electric.ShapeCache.ShapeStatus
-
     storage =
       Map.get_lazy(ctx, :storage, fn ->
         %{storage: storage} = with_in_memory_storage(ctx)
@@ -271,17 +293,17 @@ defmodule Support.ComponentSetup do
         storage
       end)
 
+    shape_status =
+      Map.get_lazy(ctx, :shape_status, fn ->
+        %{shape_status: shape_status} = with_shape_status(Map.merge(ctx, %{storage: storage}))
+        shape_status
+      end)
+
     publication_manager =
       Map.get_lazy(ctx, :publication_manager, fn ->
         %{publication_manager: publication_manager} = with_test_publication_manager(ctx)
         publication_manager
       end)
-
-    shape_status =
-      {ShapeStatus,
-       %ShapeStatus{
-         shape_meta_table: Electric.ShapeCache.get_shape_meta_table(stack_id: ctx.stack_id)
-       }}
 
     start_link_supervised!(
       {Electric.Shapes.Monitor,
@@ -328,6 +350,12 @@ defmodule Support.ComponentSetup do
     ref = Electric.StackSupervisor.subscribe_to_stack_events(stack_id)
     publication_name = "electric_test_pub_#{:erlang.phash2(stack_id)}"
 
+    connection_opts =
+      Keyword.merge(ctx.pooled_db_config, List.wrap(ctx[:connection_opt_overrides]))
+
+    replication_connection_opts =
+      Keyword.merge(ctx.db_config, List.wrap(ctx[:connection_opt_overrides]))
+
     stack_supervisor =
       start_supervised!(
         {Electric.StackSupervisor,
@@ -341,9 +369,9 @@ defmodule Support.ComponentSetup do
            ),
          persistent_kv: kv,
          storage: storage,
-         connection_opts: ctx.pooled_db_config,
+         connection_opts: connection_opts,
          replication_opts: [
-           connection_opts: ctx.db_config,
+           connection_opts: replication_connection_opts,
            slot_name: "electric_test_slot_#{:erlang.phash2(stack_id)}",
            publication_name: publication_name,
            try_creating_publication?: true,

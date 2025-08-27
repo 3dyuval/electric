@@ -30,6 +30,7 @@ defmodule Electric.ShapeCache do
   alias Electric.Replication.ShapeLogCollector
   alias Electric.ShapeCache.ShapeStatus
   alias Electric.Shapes
+  alias Electric.Shapes.ConsumerSupervisor
   alias Electric.Shapes.Shape
   alias Electric.Telemetry.OpenTelemetry
 
@@ -53,7 +54,7 @@ defmodule Electric.ShapeCache do
             publication_manager: [type: :mod_arg, required: true],
             chunk_bytes_threshold: [type: :non_neg_integer, required: true],
             inspector: [type: :mod_arg, required: true],
-            shape_status: [type: :atom, default: Electric.ShapeCache.ShapeStatus],
+            shape_status: [type: :mod_arg, required: true],
             registry: [type: {:or, [:atom, :pid]}, required: true],
             db_pool: [type: {:or, [:atom, :pid, @name_schema_tuple]}],
             run_with_conn_fn: [
@@ -101,7 +102,7 @@ defmodule Electric.ShapeCache do
 
   @impl Electric.ShapeCacheBehaviour
   def get_shape(shape, opts \\ []) do
-    table = get_shape_meta_table(opts)
+    table = ShapeStatus.shape_meta_table(opts)
     shape_status = Access.get(opts, :shape_status, ShapeStatus)
     shape_status.get_existing_shape(table, shape)
   end
@@ -125,8 +126,10 @@ defmodule Electric.ShapeCache do
   @impl Electric.ShapeCacheBehaviour
   @spec list_shapes(Access.t()) :: [{shape_handle(), Shape.t()}] | :error
   def list_shapes(opts) do
+    table = ShapeStatus.shape_meta_table(opts)
     shape_status = Access.get(opts, :shape_status, ShapeStatus)
-    shape_status.list_shapes(%ShapeStatus{shape_meta_table: get_shape_meta_table(opts)})
+
+    shape_status.list_shapes(table)
   rescue
     ArgumentError -> :error
   end
@@ -157,7 +160,7 @@ defmodule Electric.ShapeCache do
   @impl Electric.ShapeCacheBehaviour
   @spec await_snapshot_start(shape_handle(), Access.t()) :: :started | {:error, term()}
   def await_snapshot_start(shape_handle, opts \\ []) when is_binary(shape_handle) do
-    table = get_shape_meta_table(opts)
+    table = ShapeStatus.shape_meta_table(opts)
     shape_status = Access.get(opts, :shape_status, ShapeStatus)
     stack_id = Access.fetch!(opts, :stack_id)
 
@@ -195,7 +198,7 @@ defmodule Electric.ShapeCache do
 
   @impl Electric.ShapeCacheBehaviour
   def has_shape?(shape_handle, opts \\ []) do
-    table = get_shape_meta_table(opts)
+    table = ShapeStatus.shape_meta_table(opts)
     shape_status = Access.get(opts, :shape_status, ShapeStatus)
 
     if shape_status.get_existing_shape(table, shape_handle) do
@@ -211,17 +214,10 @@ defmodule Electric.ShapeCache do
     opts = Map.new(opts)
 
     stack_id = opts.stack_id
-    meta_table = :ets.new(:"#{stack_id}:shape_meta_table", [:named_table, :public, :ordered_set])
 
     Process.set_label({:shape_cache, stack_id})
     Logger.metadata(stack_id: stack_id)
     Electric.Telemetry.Sentry.set_tags_context(stack_id: stack_id)
-
-    {:ok, shape_status_state} =
-      opts.shape_status.initialise(
-        shape_meta_table: meta_table,
-        storage: opts.storage
-      )
 
     state = %{
       name: opts.name,
@@ -230,10 +226,8 @@ defmodule Electric.ShapeCache do
       publication_manager: opts.publication_manager,
       chunk_bytes_threshold: opts.chunk_bytes_threshold,
       inspector: opts.inspector,
-      shape_meta_table: meta_table,
       shape_status: opts.shape_status,
       db_pool: opts.db_pool,
-      shape_status_state: shape_status_state,
       run_with_conn_fn: opts.run_with_conn_fn,
       create_snapshot_fn: opts.create_snapshot_fn,
       log_producer: opts.log_producer,
@@ -296,23 +290,8 @@ defmodule Electric.ShapeCache do
   end
 
   @impl GenServer
-  def handle_call(
-        {:create_or_wait_shape_handle, shape, otel_ctx},
-        _from,
-        %{shape_status: shape_status} = state
-      ) do
-    {{shape_handle, latest_offset}, state} =
-      if shape_state = shape_status.get_existing_shape(state.shape_status_state, shape) do
-        {shape_state, state}
-      else
-        {:ok, shape_handle} = shape_status.add_shape(state.shape_status_state, shape)
-
-        {:ok, latest_offset} = start_shape(shape_handle, shape, state, otel_ctx)
-
-        send(self(), :maybe_expire_shapes)
-        {{shape_handle, latest_offset}, state}
-      end
-
+  def handle_call({:create_or_wait_shape_handle, shape, otel_ctx}, _from, state) do
+    {shape_handle, latest_offset} = maybe_create_shape(shape, otel_ctx, state)
     Logger.debug("Returning shape id #{shape_handle} for shape #{inspect(shape)}")
     {:reply, {shape_handle, latest_offset}, state}
   end
@@ -320,10 +299,9 @@ defmodule Electric.ShapeCache do
   def handle_call(
         {:wait_shape_handle, shape_handle},
         _from,
-        %{shape_status: shape_status} = state
+        %{shape_status: {shape_status, shape_status_state}} = state
       ) do
-    {:reply, !is_nil(shape_status.get_existing_shape(state.shape_status_state, shape_handle)),
-     state}
+    {:reply, !is_nil(shape_status.get_existing_shape(shape_status_state, shape_handle)), state}
   end
 
   def handle_call({:clean, shape_handle}, _from, state) do
@@ -345,9 +323,13 @@ defmodule Electric.ShapeCache do
 
   @impl GenServer
   def handle_cast({:clean_all_shapes_for_relations, relations}, state) do
+    {shape_status, shape_status_state} = state.shape_status
+
     affected_shapes =
-      state.shape_status_state
-      |> state.shape_status.list_shape_handles_for_relations(relations)
+      shape_status.list_shape_handles_for_relations(
+        shape_status_state,
+        relations
+      )
 
     if relations != [] do
       Logger.info(fn ->
@@ -364,12 +346,12 @@ defmodule Electric.ShapeCache do
 
   defp maybe_expire_shapes(%{max_shapes: max_shapes} = state) when max_shapes != nil do
     shape_count = shape_count(state)
+    {shape_status, shape_status_state} = state.shape_status
 
     if shape_count > max_shapes do
       number_to_expire = shape_count - max_shapes
 
-      state.shape_status_state
-      |> state.shape_status.least_recently_used(number_to_expire)
+      shape_status.least_recently_used(shape_status_state, number_to_expire)
       |> Enum.each(fn shape ->
         OpenTelemetry.with_span(
           "expiring_shape",
@@ -394,7 +376,7 @@ defmodule Electric.ShapeCache do
 
   defp maybe_expire_shapes(_), do: :ok
 
-  defp shape_count(%{shape_status: shape_status, shape_status_state: shape_status_state}) do
+  defp shape_count(%{shape_status: {shape_status, shape_status_state}}) do
     shape_status_state
     |> shape_status.list_shapes()
     |> length()
@@ -425,7 +407,7 @@ defmodule Electric.ShapeCache do
   end
 
   defp purge_shape(state, shape_handle, shape) do
-    case Electric.Shapes.ConsumerSupervisor.stop_and_clean(state.stack_id, shape_handle) do
+    case ConsumerSupervisor.stop_and_clean(state.stack_id, shape_handle) do
       :noproc ->
         # if the consumer isn't running then we can just delete things gratuitously
         :ok = Electric.Shapes.Monitor.purge_shape(state.stack_id, shape_handle, shape)
@@ -444,8 +426,8 @@ defmodule Electric.ShapeCache do
     end
   end
 
-  defp shape_handles(state) do
-    state.shape_status_state |> state.shape_status.list_shapes()
+  defp shape_handles(%{shape_status: {shape_status, shape_status_state}}) do
+    shape_status.list_shapes(shape_status_state)
   end
 
   # Timeout is per-shape, not for the entire function
@@ -488,7 +470,10 @@ defmodule Electric.ShapeCache do
     %{publication_manager: {publication_manager, publication_manager_opts}} = state
 
     case start_shape(shape_handle, shape, state) do
-      {:ok, latest_offset} ->
+      :ok ->
+        consumer = Shapes.Consumer.name(state.stack_id, shape_handle)
+        # This `initial_state` is a GenServer call, so we're blocked until consumer is ready
+        {:ok, latest_offset} = Shapes.Consumer.initial_state(consumer)
         publication_manager.recover_shape(shape_handle, shape, publication_manager_opts)
         [LogOffset.extract_lsn(latest_offset)]
 
@@ -509,6 +494,44 @@ defmodule Electric.ShapeCache do
       []
   end
 
+  defp maybe_create_shape(shape, otel_ctx, state) do
+    {shape_status, shape_status_state} = state.shape_status
+
+    if shape_state = shape_status.get_existing_shape(shape_status_state, shape) do
+      shape_state
+    else
+      shape_handles =
+        shape.shape_dependencies
+        |> Enum.map(&{&1, maybe_create_shape(&1, otel_ctx, state)})
+        |> Enum.with_index(fn {inner_shape, {shape_handle, _}}, index ->
+          materialized_type =
+            shape.where.used_refs |> Map.fetch!(["$sublink", Integer.to_string(index)])
+
+          ConsumerSupervisor.start_materializer(%{
+            stack_id: state.stack_id,
+            shape_handle: shape_handle,
+            storage: state.storage,
+            columns: inner_shape.selected_columns,
+            materialized_type: materialized_type
+          })
+
+          shape_handle
+        end)
+
+      shape = %{shape | shape_dependencies_handles: shape_handles}
+
+      {:ok, shape_handle} = shape_status.add_shape(shape_status_state, shape)
+
+      :ok = start_shape(shape_handle, shape, state, otel_ctx)
+
+      send(self(), :maybe_expire_shapes)
+
+      # In this branch of `if`, we're guaranteed to have a newly started shape, so we can be sure about it's
+      # "latest offset" because it'll be in the snapshotting stage
+      {shape_handle, LogOffset.last_before_real_offsets()}
+    end
+  end
+
   defp start_shape(shape_handle, shape, state, otel_ctx \\ nil) do
     case Electric.Shapes.DynamicConsumerSupervisor.start_shape_consumer(
            state.consumer_supervisor,
@@ -516,7 +539,7 @@ defmodule Electric.ShapeCache do
            inspector: state.inspector,
            shape_handle: shape_handle,
            shape: shape,
-           shape_status: {state.shape_status, state.shape_status_state},
+           shape_status: state.shape_status,
            storage: state.storage,
            publication_manager: state.publication_manager,
            chunk_bytes_threshold: state.chunk_bytes_threshold,
@@ -528,9 +551,7 @@ defmodule Electric.ShapeCache do
            otel_ctx: otel_ctx
          ) do
       {:ok, _supervisor_pid} ->
-        consumer = Shapes.Consumer.name(state.stack_id, shape_handle)
-        # This `initial_state` is a GenServer call, so we're blocked until consumer is ready
-        {:ok, _latest_offset} = Shapes.Consumer.initial_state(consumer)
+        :ok
 
       {:error, _reason} = error ->
         Logger.error("Failed to start shape #{shape_handle}: #{inspect(error)}")
@@ -540,10 +561,7 @@ defmodule Electric.ShapeCache do
     end
   end
 
-  defp deregister_shape(shape_handle, state) do
-    state.shape_status.remove_shape(state.shape_status_state, shape_handle)
+  defp deregister_shape(shape_handle, %{shape_status: {shape_status, shape_status_state}}) do
+    shape_status.remove_shape(shape_status_state, shape_handle)
   end
-
-  def get_shape_meta_table(opts),
-    do: opts[:shape_meta_table] || :"#{opts[:stack_id]}:shape_meta_table"
 end

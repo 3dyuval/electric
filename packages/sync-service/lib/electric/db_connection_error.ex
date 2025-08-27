@@ -1,4 +1,7 @@
 defmodule Electric.DbConnectionError do
+  alias Electric.DbConfigurationError
+  alias Electric.DbConnectionError
+
   require Logger
 
   defexception [
@@ -16,8 +19,6 @@ defmodule Electric.DbConnectionError do
           retry_may_fix?: boolean(),
           drop_slot_and_restart?: boolean()
         }
-
-  alias Electric.DbConnectionError
 
   def from_error(%DbConnectionError{} = error), do: error
 
@@ -228,6 +229,46 @@ defmodule Electric.DbConnectionError do
     }
   end
 
+  def from_error(
+        %Postgrex.Error{
+          postgres: %{
+            code: :query_canceled,
+            message: "canceling statement due to user request",
+            severity: "ERROR",
+            pg_code: "57014"
+          }
+        } = error
+      ) do
+    %DbConnectionError{
+      message: error.postgres.message,
+      type: :query_canceled,
+      original_error: error,
+      retry_may_fix?: true
+    }
+  end
+
+  def from_error(
+        %Postgrex.Error{
+          postgres: %{
+            code: :undefined_object,
+            message: "publication" <> _,
+            severity: "ERROR",
+            pg_code: "42704"
+          }
+        } = error
+      ) do
+    %DbConnectionError{
+      message: """
+      The publication was expected to be present but was not found.
+      Publications and replication slots created by Electric should not
+      be manually modified or deleted, as it breaks replication integrity.
+      """,
+      type: :missing_publication,
+      original_error: error,
+      retry_may_fix?: true
+    }
+  end
+
   def from_error(%Postgrex.Error{postgres: %{code: :internal_error, pg_code: "XX000"}} = error) do
     maybe_database_does_not_exist(error) ||
       maybe_endpoint_does_not_exist(error) ||
@@ -262,6 +303,15 @@ defmodule Electric.DbConnectionError do
     }
   end
 
+  def from_error(%DbConfigurationError{} = error) do
+    %DbConnectionError{
+      message: error.message,
+      type: :config_error,
+      original_error: error,
+      retry_may_fix?: false
+    }
+  end
+
   if Mix.env() == :test do
     def from_error(:shutdown) do
       %DbConnectionError{
@@ -277,6 +327,10 @@ defmodule Electric.DbConnectionError do
   end
 
   def from_error(error), do: unknown_error(error)
+
+  def format_original_error(%DbConnectionError{original_error: %DbConfigurationError{} = error}) do
+    Exception.format(:error, error)
+  end
 
   def format_original_error(%DbConnectionError{original_error: error}) do
     inspect(error, pretty: true)

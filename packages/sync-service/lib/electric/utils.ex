@@ -93,6 +93,22 @@ defmodule Electric.Utils do
   end
 
   @doc """
+  Reduce an enumerable while accumulating an accumulator, unwrapping a result tuple returned by
+  the reducer and stopping on error.
+  """
+  @spec reduce_while_ok(Enumerable.t(elem), acc, (elem, acc -> {:ok, acc} | {:error, term()})) ::
+          {:ok, acc} | {:error, term()}
+        when elem: var, acc: var
+  def reduce_while_ok(enum, acc, fun) do
+    Enum.reduce_while(enum, {:ok, acc}, fn elem, {:ok, acc} ->
+      case fun.(elem, acc) do
+        {:ok, new_acc} -> {:cont, {:ok, new_acc}}
+        {:error, _} = error -> {:halt, error}
+      end
+    end)
+  end
+
+  @doc """
   Apply a function to each element of an enumerable, recursively if the element is an enumerable itself.
 
   ## Examples
@@ -342,10 +358,11 @@ defmodule Electric.Utils do
   defp unsafe_char?(<<_::binary-1, rest::binary>>), do: unsafe_char?(rest)
   defp unsafe_char?(<<>>), do: false
 
-  def escape_quotes(text), do: :binary.replace(text, ~S|"|, ~S|""|, [:global])
+  def escape_quotes(text, quot_char \\ ?"),
+    do: :binary.replace(text, <<quot_char>>, <<quot_char, quot_char>>, [:global])
 
   @doc """
-  Quote a string for use in SQL queries.
+  Quote the given identifier for use in SQL queries.
 
   ## Examples
       iex> quote_name("foo")
@@ -356,6 +373,12 @@ defmodule Electric.Utils do
   """
   @spec quote_name(String.t()) :: String.t()
   def quote_name(str), do: ~s|"#{escape_quotes(str)}"|
+
+  @doc """
+  Quote the given binary for use as a literal string in SQL queries.
+  """
+  @spec quote_string(String.t()) :: String.t()
+  def quote_string(str), do: ~s|'#{escape_quotes(str, ?')}'|
 
   @doc """
   Parses quoted names.

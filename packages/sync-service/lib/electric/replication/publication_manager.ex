@@ -1,11 +1,13 @@
 defmodule Electric.Replication.PublicationManager do
   @moduledoc false
-  require Logger
   use GenServer
 
   alias Electric.Postgres.Configuration
   alias Electric.Replication.Eval.Expr
   alias Electric.Shapes.Shape
+  alias Electric.Utils
+
+  require Logger
 
   @callback name(binary() | Keyword.t()) :: term()
   @callback recover_shape(Electric.ShapeCacheBehaviour.shape_handle(), Shape.t(), Keyword.t()) ::
@@ -19,7 +21,6 @@ defmodule Electric.Replication.PublicationManager do
     :relation_filter_counters,
     :prepared_relation_filters,
     :committed_relation_filters,
-    :row_filtering_enabled,
     :update_debounce_timeout,
     :scheduled_updated_ref,
     :retries,
@@ -27,26 +28,23 @@ defmodule Electric.Replication.PublicationManager do
     :tracked_shape_handles,
     :publication_name,
     :db_pool,
-    :pg_version,
+    :can_alter_publication?,
+    :manual_table_publishing?,
     :configure_tables_for_replication_fn,
     :shape_cache,
     next_update_forced?: false
   ]
 
-  @typep oid_rel() :: {non_neg_integer(), Electric.relation()}
-
   @typep state() :: %__MODULE__{
-           relation_filter_counters: %{oid_rel() => map()},
-           prepared_relation_filters: %{oid_rel() => __MODULE__.RelationFilter.t()},
-           committed_relation_filters: %{oid_rel() => __MODULE__.RelationFilter.t()},
-           row_filtering_enabled: boolean(),
+           relation_filter_counters: %{Electric.oid_relation() => map()},
+           prepared_relation_filters: %{Electric.oid_relation() => __MODULE__.RelationFilter.t()},
+           committed_relation_filters: %{Electric.oid_relation() => __MODULE__.RelationFilter.t()},
            update_debounce_timeout: timeout(),
            scheduled_updated_ref: nil | reference(),
            waiters: list(GenServer.from()),
            tracked_shape_handles: MapSet.t(),
            publication_name: String.t(),
            db_pool: term(),
-           pg_version: non_neg_integer(),
            configure_tables_for_replication_fn: fun(),
            shape_cache: {module(), term()},
            next_update_forced?: boolean()
@@ -88,12 +86,13 @@ defmodule Electric.Replication.PublicationManager do
             publication_name: [type: :string, required: true],
             db_pool: [type: {:or, [:atom, :pid, @name_schema_tuple]}],
             shape_cache: [type: :mod_arg, required: false],
-            pg_version: [type: :integer, required: true],
+            can_alter_publication?: [type: :boolean, required: false, default: true],
+            manual_table_publishing?: [type: :boolean, required: false, default: false],
             update_debounce_timeout: [type: :timeout, default: @default_debounce_timeout],
             configure_tables_for_replication_fn: [
-              type: {:fun, 5},
+              type: {:fun, 4},
               required: false,
-              default: &Configuration.configure_publication!/5
+              default: &Configuration.configure_publication!/4
             ],
             server: [type: :any, required: false]
           )
@@ -175,7 +174,6 @@ defmodule Electric.Replication.PublicationManager do
       relation_filter_counters: %{},
       prepared_relation_filters: %{},
       committed_relation_filters: %{},
-      row_filtering_enabled: opts.pg_version >= @pg_15,
       scheduled_updated_ref: nil,
       retries: 0,
       waiters: [],
@@ -183,7 +181,8 @@ defmodule Electric.Replication.PublicationManager do
       update_debounce_timeout: Map.get(opts, :update_debounce_timeout, @default_debounce_timeout),
       publication_name: opts.publication_name,
       db_pool: opts.db_pool,
-      pg_version: opts.pg_version,
+      can_alter_publication?: opts.can_alter_publication?,
+      manual_table_publishing?: opts.manual_table_publishing?,
       shape_cache: Map.get(opts, :shape_cache, {Electric.ShapeCache, [stack_id: opts.stack_id]}),
       configure_tables_for_replication_fn: opts.configure_tables_for_replication_fn
     }
@@ -251,39 +250,89 @@ defmodule Electric.Replication.PublicationManager do
 
   defguardp is_fatal(err)
             when is_exception(err, Postgrex.Error) and
-                   err.postgres.code in ~w|undefined_function undefined_table|a
+                   err.postgres.code in ~w|undefined_function undefined_table insufficient_privilege|a
 
   @impl true
-  def handle_info(
-        :update_publication,
-        %__MODULE__{prepared_relation_filters: relation_filters, retries: retries} = state
-      ) do
-    state = %{state | scheduled_updated_ref: nil, retries: 0}
+  def handle_info(:update_publication, state) do
+    # Clear out the timer ref
+    state = %{state | scheduled_updated_ref: nil}
 
-    case update_publication(state) do
-      {:ok, state, missing_relations} ->
-        if missing_relations != [] do
+    # Invoke the actual handler for the publication update
+    if not state.can_alter_publication? or state.manual_table_publishing? do
+      check_publication_relations(state)
+    else
+      update_publication_state(state)
+    end
+  end
+
+  defp check_publication_relations(
+         %__MODULE__{
+           committed_relation_filters: committed_filters,
+           prepared_relation_filters: current_filters,
+           next_update_forced?: forced?
+         } = state
+       ) do
+    if not forced? and filters_are_equal?(current_filters, committed_filters) do
+      Logger.debug("No changes to publication, skipping checkup")
+      {:noreply, reply_to_waiters(:ok, state)}
+    else
+      # We cannot modify the publication, so we only check whether it is in the right state for
+      # the set of currently active relation filters.
+      case Configuration.check_publication_relations_and_identity(
+             state.db_pool,
+             Map.keys(committed_filters),
+             Map.keys(current_filters),
+             state.publication_name
+           ) do
+        {:ok, modified_relations} ->
+          update_relation_filters(state, modified_relations)
+
+        {:error, reason} ->
+          # Whatever the error, we must invalidate the shapes that match the errored relations
+          # to ensure there's no missed data for a shape after the publication state has been
+          # corrected by the database admin.
+          {error_type, relations} = reason
+
           Logger.info(
-            "Relations dropped/renamed since last publication update: #{inspect(missing_relations)}"
+            "Cleaning up shapes for misconfigured or unpublished relations #{inspect(relations)}"
           )
 
           {mod, args} = state.shape_cache
-          mod.clean_all_shapes_for_relations(missing_relations, args)
-        end
+          mod.clean_all_shapes_for_relations(relations, args)
 
-        state = reply_to_waiters(:ok, state)
-        committed_filters = Map.drop(relation_filters, missing_relations)
+          tables = Enum.map(relations, fn {_oid, relation} -> Utils.relation_to_sql(relation) end)
+          message = publication_error_message(error_type, tables, state)
+          error = %Electric.DbConfigurationError{type: reason, message: message}
 
-        {:noreply,
-         %{
-           state
-           | committed_relation_filters: committed_filters,
-             next_update_forced?: false,
-             # We're setting "prepared" filters to the committed filters, despite us maybe dropping missing relations from these filters.
-             # This is correct, because for every filter we're dropping, we're also removing the shape from the shape cache,
-             # which eventually will do the same thing - this lowers the number of attempted alterations to the DB where we do nothing
-             prepared_relation_filters: committed_filters
-         }}
+          state = reply_to_waiters({:error, error}, state)
+          {:noreply, %{state | next_update_forced?: false}}
+      end
+    end
+  end
+
+  defp update_publication_state(%__MODULE__{retries: retries} = state) do
+    state = %{state | retries: 0}
+
+    case update_publication(state) do
+      {:ok, state, missing_relations} ->
+        update_relation_filters(state, missing_relations)
+
+      # Handle the case where the publication is not present as a fatal one
+      {:error,
+       %Postgrex.Error{
+         postgres: %{
+           code: :undefined_object,
+           message: "publication" <> _,
+           severity: "ERROR",
+           pg_code: "42704"
+         }
+       } = err} ->
+        Logger.warning(
+          "The publication was expected to be present but was not found: #{inspect(err)}"
+        )
+
+        state = reply_to_waiters({:error, err}, state)
+        {:stop, {:shutdown, err}, state}
 
       {:error, err} when retries < @max_retries and not is_fatal(err) ->
         Logger.warning("Failed to configure publication, retrying: #{inspect(err)}")
@@ -295,6 +344,61 @@ defmodule Electric.Replication.PublicationManager do
         state = reply_to_waiters({:error, err}, state)
         {:noreply, %{state | next_update_forced?: false}}
     end
+  end
+
+  # invalidated_relations are those that have been modified or dropped from the publication.
+  defp update_relation_filters(state, invalidated_relations) do
+    if invalidated_relations != [] do
+      Logger.info(
+        "Relations dropped/renamed since last publication update: #{inspect(invalidated_relations)}"
+      )
+
+      {mod, args} = state.shape_cache
+      mod.clean_all_shapes_for_relations(invalidated_relations, args)
+    end
+
+    state = reply_to_waiters(:ok, state)
+    committed_filters = Map.drop(state.prepared_relation_filters, invalidated_relations)
+
+    {:noreply,
+     %{
+       state
+       | committed_relation_filters: committed_filters,
+         next_update_forced?: false,
+         # We're setting "prepared" filters to the committed filters, despite us maybe dropping missing relations from these filters.
+         # This is correct, because for every filter we're dropping, we're also removing the shape from the shape cache,
+         # which eventually will do the same thing - this lowers the number of attempted alterations to the DB where we do nothing
+         prepared_relation_filters: committed_filters
+     }}
+  end
+
+  defp publication_error_message(:tables_missing_from_publication, tables, state) do
+    tail =
+      cond do
+        state.manual_table_publishing? ->
+          "the ELECTRIC_MANUAL_TABLE_PUBLISHING setting prevents Electric from adding "
+
+        not state.can_alter_publication? ->
+          "Electric lacks privileges to add "
+      end
+
+    {table_clause, pronoun} =
+      case tables do
+        [table] -> {"table " <> inspect(table) <> " is", "it"}
+        _ -> {"tables " <> inspect(tables) <> " are", "them"}
+      end
+
+    "Database #{table_clause} missing from the publication and " <> tail <> pronoun
+  end
+
+  defp publication_error_message(:misconfigured_replica_identity, tables, _state) do
+    table_clause =
+      case tables do
+        [table] -> "table #{inspect(table)} does not have its"
+        _ -> "tables #{inspect(tables)} do not have their"
+      end
+
+    "Database #{table_clause} replica identity set to FULL"
   end
 
   @spec schedule_update_publication(timeout(), boolean(), state()) :: state()
@@ -317,15 +421,10 @@ defmodule Electric.Replication.PublicationManager do
        do: %{state | next_update_forced?: forced? or state.next_update_forced?}
 
   defp update_needed?(%__MODULE__{
-         prepared_relation_filters: commited,
-         committed_relation_filters: prepared,
-         row_filtering_enabled: row_filtering_enabled
+         prepared_relation_filters: prepared,
+         committed_relation_filters: committed
        }) do
-    cond do
-      prepared == commited -> false
-      not row_filtering_enabled and Map.keys(prepared) == Map.keys(commited) -> false
-      true -> true
-    end
+    not filters_are_equal?(prepared, committed)
   end
 
   # Updates are forced when we're doing periodic checks: we expect no changes to the filters,
@@ -334,6 +433,7 @@ defmodule Electric.Replication.PublicationManager do
   # to the DB.
   @spec update_publication(state()) ::
           {:ok, state(), [Electric.oid_relation()]} | {:error, term()}
+
   defp update_publication(
          %__MODULE__{
            committed_relation_filters: committed_filters,
@@ -350,17 +450,15 @@ defmodule Electric.Replication.PublicationManager do
          %__MODULE__{
            committed_relation_filters: committed_filters,
            prepared_relation_filters: current_filters,
-           row_filtering_enabled: false,
            publication_name: publication_name,
            db_pool: db_pool,
-           pg_version: pg_version,
            configure_tables_for_replication_fn: configure_tables_for_replication_fn,
            next_update_forced?: forced?
          } = state
        ) do
     # If row filtering is disabled, we only care about changes in actual relations
     # included in the publication
-    if not forced? and Map.keys(current_filters) == Map.keys(committed_filters) do
+    if not forced? and filters_are_equal?(current_filters, committed_filters) do
       Logger.debug("No changes to publication, skipping update")
       {:ok, state, []}
     else
@@ -369,10 +467,7 @@ defmodule Electric.Replication.PublicationManager do
           configure_tables_for_replication_fn.(
             db_pool,
             Map.keys(committed_filters),
-            Map.new(current_filters, fn {rel, filter} ->
-              {rel, RelationFilter.relation_only(filter)}
-            end),
-            pg_version,
+            current_filters,
             publication_name
           )
 
@@ -381,50 +476,6 @@ defmodule Electric.Replication.PublicationManager do
         err -> {:error, err}
       end
     end
-  end
-
-  defp update_publication(
-         %__MODULE__{
-           committed_relation_filters: committed_filters,
-           prepared_relation_filters: relation_filters,
-           row_filtering_enabled: true,
-           publication_name: publication_name,
-           db_pool: db_pool,
-           pg_version: pg_version,
-           configure_tables_for_replication_fn: configure_tables_for_replication_fn
-         } = state
-       ) do
-    missing_relations =
-      configure_tables_for_replication_fn.(
-        db_pool,
-        Map.keys(committed_filters),
-        relation_filters,
-        pg_version,
-        publication_name
-      )
-
-    {:ok, state, missing_relations}
-  rescue
-    # if we are unable to do row filtering for whatever reason, fall back to doing only
-    # relation-based filtering - this is a fallback for unsupported where clauses that we
-    # do not detect when composing relation filters
-    err ->
-      case err do
-        %Postgrex.Error{postgres: %{code: :feature_not_supported}} ->
-          Logger.warning(
-            "Row filtering is not supported, falling back to relation-based filtering"
-          )
-
-          update_publication(%{
-            state
-            | # disable row filtering and reset committed filters
-              row_filtering_enabled: false,
-              committed_relation_filters: %{}
-          })
-
-        _ ->
-          {:error, err}
-      end
   end
 
   @spec update_relation_filters_for_shape(Shape.t(), filter_operation(), state()) :: state()
@@ -582,5 +633,13 @@ defmodule Electric.Replication.PublicationManager do
          %__MODULE__{tracked_shape_handles: tracked_shape_handles}
        ) do
     MapSet.member?(tracked_shape_handles, shape_handle)
+  end
+
+  defp filters_are_equal?(old_filters, new_filters) do
+    Map.keys(old_filters) == Map.keys(new_filters) and
+      Enum.all?(old_filters, fn {key, old_filter} ->
+        new_filter = Map.fetch!(new_filters, key)
+        Map.delete(old_filter, :where_clauses) == Map.delete(new_filter, :where_clauses)
+      end)
   end
 end

@@ -1,5 +1,17 @@
 # @electric-sql/client
 
+## 1.0.9
+
+### Patch Changes
+
+- 2c19914: Ensure 409s do not lead to infinite request cycles because of caching.
+
+## 1.0.8
+
+### Patch Changes
+
+- 098e693: Export { ELECTRIC_PROTOCOL_QUERY_PARAMS } from "@electric-sql/client" for use in proxies
+
 ## 1.0.7
 
 ### Patch Changes

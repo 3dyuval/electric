@@ -453,6 +453,9 @@ defmodule Electric.Plug.ServeShapePlugTest do
     test "the 304 response includes caching headers that are appropriate for the offset", ctx do
       Mock.ShapeCache
       |> stub(:has_shape?, fn @test_shape_handle, _opts -> true end)
+      |> stub(:get_or_create_shape_handle, fn @test_shape, _opts ->
+        {@test_shape_handle, @test_offset}
+      end)
       |> stub(:get_shape, fn @test_shape, _opts -> {@test_shape_handle, @test_offset} end)
 
       Mock.Storage
@@ -734,7 +737,9 @@ defmodule Electric.Plug.ServeShapePlugTest do
       assert Jason.decode!(conn.resp_body) == %{
                "message" => "Invalid request",
                "errors" => %{
-                 "columns" => ["Must include all primary key columns, missing: id"]
+                 "columns" => [
+                   "The list of columns must include all primary key columns, missing: id"
+                 ]
                }
              }
     end
@@ -750,7 +755,7 @@ defmodule Electric.Plug.ServeShapePlugTest do
       assert Jason.decode!(conn.resp_body) == %{
                "message" => "Invalid request",
                "errors" => %{
-                 "columns" => ["The following columns could not be found: invalid"]
+                 "columns" => ["The following columns are not found on the table: invalid"]
                }
              }
     end
