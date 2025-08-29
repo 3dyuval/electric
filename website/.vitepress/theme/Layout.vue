@@ -47,7 +47,28 @@ const { hasSidebar } = useSidebar()
   <Layout :class="!hasSidebar ? 'nav-relative' : ''">
     <template #layout-top>
       <template v-if="!hasSidebar">
-        <ReleaseBanner />
+        <ReleaseBanner
+          link="/docs/integrations/vue"
+          subtitle="now available!"
+          description="Build reactive Vue apps with seamless sync!"
+          background="#262626"
+        >
+          <template #icon>
+            <img src="https://vuejs.org/logo.svg" alt="Vue.js logo" style="width: 20px; height: 20px; vertical-align: middle; margin-right: 8px;" />
+          </template>
+          <template #title>
+            <span style="font-weight: bold; text-decoration: none; background: -webkit-linear-gradient(315deg,#42d392 25%,#647eff); background-clip: border-box; background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Introducing Vue Composables</span>
+          </template>
+        </ReleaseBanner>
+        <ReleaseBanner 
+          link="/blog/2025/07/29/local-first-sync-with-tanstack-db"
+          subtitle="now in BETA!"
+          description="Reactive client store for building super fast apps on sync!"
+          background="var(--vp-c-indigo-3)"
+        >
+          <template #icon>🔥</template>
+          <template #title>Introducing Tanstack DB</template>
+        </ReleaseBanner>
       </template>
     </template>
     <template #nav-bar-content-after>
