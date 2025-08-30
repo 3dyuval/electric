@@ -29,7 +29,7 @@ onContentUpdated(() => {
       <div :class="['sticky-header-container', headerClass]" >
       <div class="title-container">
         <img :src="frontmatter.image" class="icon" />
-        <h1 :class="[titleClass]">
+        <h1 :class="[frontmatter.titleClass]">
           {{ frontmatter.title}}
         </h1>
       </div>
@@ -57,6 +57,7 @@ onContentUpdated(() => {
 .VPContent:has(.sticky-header-container) {
   position: absolute;
 }
+
 </style>
 
 <style scoped>
@@ -219,7 +220,7 @@ onContentUpdated(() => {
     gap: .2em;
     flex-direction: row;
     align-items: center;
-        font-size: 56px;
+    font-size: 56px;
 
   }
 
@@ -228,7 +229,9 @@ onContentUpdated(() => {
     font-weight: 600;
     color: var(--vp-c-text-1);
     margin: 0;
+    line-height: 1.25em;
   }
+
 
   .icon {
     width: 1em;
@@ -236,6 +239,8 @@ onContentUpdated(() => {
     flex-shrink: 0;
   }
 }
+
+
 </style>
 
 
